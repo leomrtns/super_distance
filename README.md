@@ -4,18 +4,26 @@ This software is written in C, with functions to calculate distances between tre
 It borrows many functions from the [guenomu software](https://bitbucket.org/leomrtns/guenomu/) for phylogenomic species tree inference and 
 also from the [genefam-dist library](https://github.com/leomrtns/genefam-dist).
 
+The code relies on external software, defined as submodules in the github repository: [biomcmc-lib](https://github.com/leomrtns/biomcmc-lib)
+and [argtable3](https://github.com/argtable/argtable3). 
+
 ## Installation
-The instalation uses the autotools build system. Assuming you downloaded the zip file for the master version:
+
+The instalation uses the autotools build system.  
 
 ```
-/home/simpson/$ unzip super_sptree-master.zip 
+/home/simpson/$ git clone --recursive git@github.com:leomrtns/super_sptree.git
 /home/simpson/$ mkdir build
 /home/simpson/$ cd build
 /home/simpson/$ ../super_sptree-master/configure --prefix /usr/local
 /home/simpson/$ make; sudo make install
 ```
+(I guess if you download the zip you don't have the submodules?)
 
-As seen above, it is usually good idea to compile the code on a dedicated clean directory (`build`, in the example). 
+As seen above, it is usually good idea to compile the code on a dedicated clean directory (`build`, in the example). For
+some reason many other software using autotools don't work properly, forcing you to run `configure` inside the
+repository directory...
+
 The example above will install the `libsuper_sptree` globally, in `/usr/local`. If you don't have administrative priviledges you can
 chose a local directory (and drop the "sudo" command).
 
