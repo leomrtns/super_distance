@@ -1,12 +1,12 @@
 dnl Autoconf init, autoheader output location, config and prefix directories
 AC_INIT([super_sptree], [0.1], [leomrtns@gmail.com])
+AC_CONFIG_AUX_DIR([.])
 
 dnl AC_CONFIG_SRCDIR([src/main_distance.c])
 AC_CONFIG_HEADER([lib/config.h])
 AC_PREFIX_DEFAULT(${HOME})
 dnl libtoolize recomendation
 AC_CONFIG_MACRO_DIR([m4])
-
 dnl Override default O2
 CFLAGS=${CFLAGS-""}
 CXXFLAGS=${CXXFLAGS-""}
@@ -34,27 +34,7 @@ AC_OPENMP
 AC_SUBST(OPENMP_CFLAGS)
 AC_SUBST(OPENMP_CPPFLAGS)
 
-dnl check for the math library
-AC_CHECK_LIB([m],[main])
-
-dnl check for the clock_gettime function in rt library (linking with -lrt if found)
-dnl (preferred way of checking for libraries, over AC_CHECK_LIB...)
-AC_SEARCH_LIBS([clock_gettime],[rt])                                               
-
-dnl Check for the 15 Standard C (ANSI-C/ISO-C) headers
-AC_HEADER_STDC
-
-dnl Check for additional headers 
-AC_CHECK_HEADERS( \
-    unistd.h \
-    sys/time.h \
-    sys/times.h \
-)
-
-dnl will add lines #define SIZEOF_INT to config.h etc.
-AC_CHECK_SIZEOF(int)
-AC_CHECK_SIZEOF(double)
-AC_CHECK_SIZEOF(long long int)
+dnl library checks (math etc.) are done by biomcmc-lib
 
 AC_MSG_RESULT([                ===    configuration options specific to super_sptree])
 
@@ -93,7 +73,6 @@ else
     AM_CFLAGS="${AM_CFLAGS} -std=gnu11"
 fi
 
-
 AC_MSG_RESULT([                ===    end of specific configuration options])
 
 dnl propagate changed vars among final makefiles
@@ -104,11 +83,14 @@ AC_SUBST([MPI_CXXFLAGS])
 
 dnl generate makefiles (last recipes, after defining CFLAGS etc.)
 AC_CONFIG_FILES([ Makefile lib/Makefile src/Makefile])
+
+# Call biomcmc-lib ./configure script recursively.
+AC_CONFIG_SUBDIRS([biomcmc-lib])
 AC_OUTPUT
 
 echo \
 "---- 
-Configuration parameters:
+Configuration parameters for super_sptree:
 
  Source code location:   ${srcdir}
  Compiler     (library): ${CC}
@@ -117,8 +99,3 @@ Configuration parameters:
  Install path:   ${prefix}
 
 ----"
-
-dnl EXAMPLE sizeof check
-dnl AC_CHECK_SIZEOF(long)
-dnl EXAMPLE receiving custom variable (like CFLAGS) 
-dnl AC_SUBST(SHARED_FLAGS)

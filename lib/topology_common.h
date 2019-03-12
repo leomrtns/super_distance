@@ -25,9 +25,7 @@
 #ifndef _biomcmc_topology_common_h_
 #define _biomcmc_topology_common_h_
 
-#include "bipartition.h"
-#include "hashtable.h"
-#include "empirical_frequency.h"
+#include <biomcmc-lib/biomcmc.h> 
 
 typedef struct topol_node_struct* topol_node;
 typedef struct topology_struct* topology;

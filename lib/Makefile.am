@@ -1,17 +1,17 @@
-AM_CPPFLAGS = $(GTKDEPS_CFLAGS)  @OPENMP_CPPFLAGS@
+AM_CPPFLAGS = $(GTKDEPS_CFLAGS)  @OPENMP_CPPFLAGS@ -I$(srcdir)/biomcmc-lib
+
 AM_CFLAGS = @AM_CFLAGS@  @OPENMP_CFLAGS@
-LDADD = $(GTKDEPS_LIBS) $(AM_LDFLAGS)
+LDADD = $(GTKDEPS_LIBS) $(AM_LDFLAGS) biomcmc-lib/libbiomcmc.la
 
-common_headers = hashtable.h lowlevel.h random_number_gen.h random_number.h nexus_common.h \
-                 topology_common.h topology_space.h topology_mrca.h bipartition.h topology_build.h \
-                 topology_splitset.h prob_distribution.h empirical_frequency.h super_sptree.h
 
-common_src     = hashtable.c lowlevel.c random_number_gen.c random_number.c nexus_common.c \
-                 topology_common.c topology_space.c topology_mrca.c bipartition.c topology_build.c \
-                 topology_splitset.c prob_distribution.c empirical_frequency.c super_sptree.c
+common_headers = topology_common.h topology_space.h topology_mrca.h topology_build.h \
+                 topology_splitset.h super_sptree.h
 
-lib_LTLIBRARIES = libgenefamdist.la
-otherincludedir = $(includedir)/genefam
+common_src     = topology_common.c topology_space.c topology_mrca.c topology_build.c \
+                 topology_splitset.c super_sptree.c
+
+lib_LTLIBRARIES = libsuper_sptree.la
+otherincludedir = $(includedir)/super_sptree
 otherinclude_HEADERS = config.h $(common_headers)
-libgenefamdist_la_SOURCES = $(common_src) $(common_headers)
+libsuper_sptree_la_SOURCES = $(common_src) $(common_headers)
 

@@ -20,8 +20,8 @@
 #ifndef _biomcmc_topology_build_h_
 #define _biomcmc_topology_build_h_
 
+#include <biomcmc.h> 
 #include "topology_common.h"
-#include "random_number.h"
 
 /*! \brief low level function that generates a random tree (equiv. to random refinement of a star topology) */
 void randomize_topology (topology tree);
