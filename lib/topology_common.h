@@ -25,7 +25,7 @@
 #ifndef _biomcmc_topology_common_h_
 #define _biomcmc_topology_common_h_
 
-#include <biomcmc-lib/biomcmc.h> 
+#include <biomcmc.h> 
 
 typedef struct topol_node_struct* topol_node;
 typedef struct topology_struct* topology;
