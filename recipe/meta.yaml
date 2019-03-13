@@ -1,13 +1,21 @@
 {% set version = "0.0.1" %}
 {% set sha256 = "ad76998cf6db0d76f8b3326f085d6b8c01f57302b5d89fd057669b6390df978f" %}
+{% set revision= "bd5816d7c0406805fc14a0de56b54df15f4114d8" %}
 
 package:
   name: super_sptree
-  version: '{{version}}'
+  version: {{ version }}
 
 source:
-  url: https://github.com/leomrtns/super_sptree/archive/v{{version}}.tar.gz 
-  sha256: '{{sha256}}'
+  git_url: https://github.com/leomrtns/super_sptree
+  git_rev: {{ revision }}
+  #  url: https://github.com/leomrtns/super_sptree/archive/v{{version}}.tar.gz 
+  #  sha256: '{{sha256}}'
+  md5: unused
+
+extra:
+  skip-lints:
+    - uses_git_url
 
 build:
   number: 3
