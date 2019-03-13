@@ -1,0 +1,40 @@
+{% set version = "0.0.1" %}
+{% set sha256 = "ad76998cf6db0d76f8b3326f085d6b8c01f57302b5d89fd057669b6390df978f" %}
+
+package:
+  name: super_sptree
+  version: '{{version}}'
+
+source:
+  url: https://github.com/leomrtns/super_sptree/archive/v{{version}}.tar.gz 
+  sha256: '{{sha256}}'
+
+build:
+  number: 3
+  skip: true # [osx]
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - libcxx 4.0.*  # [osx]
+    - openmp 4.0.*  # [osx]
+  host:
+    - zlib
+    - libcxx 4.0.*  # [osx]
+    - openmp 4.0.*  # [osx]
+
+  run:
+    - zlib
+
+test:
+  commands:
+    - super_sptree --help 
+
+about:
+  home: https://github.com/leomrtns/super_sptree 
+  license: "GPL-3"
+  summary: "algorithms for supertree estimation"
+  identifiers:
+    - biotools:super_sptree
+    - doi:xx
+
