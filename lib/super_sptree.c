@@ -19,7 +19,7 @@ topology_space topology_space_from_newick_string (const char *treelist_string, b
 /*! \brief calculate distances between gene tree and collection of sptrees, and storing into newly allocated distances[] */ 
 bool generate_output_distances (topology_space gtree, topology_space stree, double **distances, int *n, bool rescale);
 /*! \brief calculate distances between gene tree and random sptrees, accumulating into previously allocated pvalues[] */ 
-int update_randomized_distances (topology gtree, topology stree, int n_obs, double *obs_dist, int *pvalues, int n_reps, double *maxdist);
+int update_randomised_distances (topology gtree, topology stree, int n_obs, double *obs_dist, int *pvalues, int n_reps, double *maxdist);
 /*! \brief defines upper bound for all distances based on theory, not empirical as p-value above */
 bool calculate_max_distances (topology gt, double *maxd, splitset split);
 
@@ -95,7 +95,7 @@ genefam_module_treesignal_fromtrees_pvalue (const char *gtree_str, const char *s
   }
 
   n_samples = sptree->ndistinct - 1; /* number of comparisons per tree, for calculating p-value */
-  n_samples += update_randomized_distances (genetree->distinct[0], sptree->distinct[0], sptree->ndistinct, obs_distances, pvalues, n_reps, dist_bounds);
+  n_samples += update_randomised_distances (genetree->distinct[0], sptree->distinct[0], sptree->ndistinct, obs_distances, pvalues, n_reps, dist_bounds);
   for (i=0; i < n_output; i++) (*output_distances)[i] = ((double)pvalues[i])/(double)(n_samples); /* first trees X NDISTS are p-values */
 
   /* second half of output vector has tree-distance pairs, scaled to min and max observed values */
@@ -151,7 +151,7 @@ generate_output_distances (topology_space gtree, topology_space stree, double **
 }
 
 int
-update_randomized_distances (topology gtree, topology stree, int n_obs, double *obs_dist, int *pvalues, int n_reps, double *bounds)
+update_randomised_distances (topology gtree, topology stree, int n_obs, double *obs_dist, int *pvalues, int n_reps, double *bounds)
 {
   int i, j, k;
   splitset split;
@@ -161,8 +161,8 @@ update_randomized_distances (topology gtree, topology stree, int n_obs, double *
   init_tree_recon_from_species_topology (gtree, stree);
 
   for (i=0; i < n_reps; i++) {
-    randomize_topology (gtree); 
-    randomize_topology (stree); 
+    randomise_topology (gtree); 
+    randomise_topology (stree); 
     gene_tree_reconcile (gtree, stree);
     dSPR_gene_species (gtree, stree, split);
     tmp_dist[0] = (double) gtree->rec->ndups; 
@@ -264,7 +264,7 @@ genefam_module_generate_spr_trees (int n_leaves, int n_iter, int n_spr)
   origtree = new_topology (n_leaves);
   randtree = new_topology (n_leaves);
 
-  randomize_topology (randtree);
+  randomise_topology (randtree);
   s = topology_to_string_create_name (randtree, NULL); /* second parameter is vector with branch lengths */
   new_str_size = strlen (s);
   output_tree_string = (char*) biomcmc_malloc (sizeof(char) * new_str_size);

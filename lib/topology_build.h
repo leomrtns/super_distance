@@ -21,12 +21,11 @@
 #define _biomcmc_topology_build_h_
 
 #include <biomcmc.h> 
-#include "topology_common.h"
 
 /*! \brief low level function that generates a random tree (equiv. to random refinement of a star topology) */
-void randomize_topology (topology tree);
+void randomise_topology (topology tree);
 /*! \brief generates a random topology if sample_type==0, but can reuse some info later to create a "correlated" tree */
-void quasi_randomize_topology (topology tree, int sample_type);
+void quasi_randomise_topology (topology tree, int sample_type);
 /*! \brief lowlevel UPGMA (or single-linkage) function that depends on a topology and a matrix_distance */
 void upgma_from_distance_matrix (topology tree, distance_matrix dist, bool single_linkage);
 /*! \brief lowlevel bioNJ function (Gascuel and Cuong implementation) that depends on a topology and a matrix_distance */

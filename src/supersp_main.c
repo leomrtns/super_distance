@@ -403,7 +403,7 @@ new_gene_sptrees (int n_genes, int n_ratchet, int n_proposal, topology_space spt
 
   for (i=0; i < gs->n_ratchet; i++) {
     gs->ratchet[i] = init_topol_for_new_gene_sptrees (sptree->distinct[0]);
-    randomize_topology (gs->ratchet[i]); // should be filled outside this function (to recycle optimal sptrees from previous iteration)
+    randomise_topology (gs->ratchet[i]); // should be filled outside this function (to recycle optimal sptrees from previous iteration)
   }
   for (i=0; i < gs->n_proposal; i++) gs->proposal[i] = init_topol_for_new_gene_sptrees (sptree->distinct[0]);
   for (i=0; i < gs->n_genes; i++) gs->gene[i] = NULL; // must be created later, when we receive the gene topol_spaces 
@@ -450,7 +450,7 @@ initialise_gene_sptrees_with_genetree_filenames (gene_sptrees gs, char_vector ge
     pivot = gs->gene[i];
     gs->gene[i] = new_genetree (genetre->distinct[0], gs->proposal[0]);
     for (j = 0; j < 32; j++) {
-      randomize_topology (gs->proposal[0]);
+      randomise_topology (gs->proposal[0]);
       calculate_genetree_distance (gs->gene[i], gs->proposal[0], true); // true --> local (since we must find max values)
     }
     del_genetree (pivot);
@@ -517,8 +517,8 @@ sorting_of_gene_sptrees_ratchet (gene_sptrees gs, topology_space tsp, bool local
   for (i=0; i < gs->n_ratchet; i++) gs->ratchet_score[i] = ef->d[i].freq; // doesnt need pivot since ef->freqs came from ratchet_score[]
   gs->best_score = ef->d[0].freq; // lowest (best) score is first element (may need to be recalc every time new proposals are created, using new minima)
   fprintf (stderr, "Ordered list of best scores: ");
-  for (i = 0; i < 5; i++) printf ("%7.3lf ", gs->ratchet_score[i]);   printf (" ...... ");
-  for (i = gs->n_ratchet - 6; i < gs->n_ratchet; i++) printf ("%7.3lf ", gs->ratchet_score[i]);   printf ("\n");
+  for (i = 0; i < 5; i++) { printf ("%7.3lf ", gs->ratchet_score[i]); } printf (" ...... ");
+  for (i = gs->n_ratchet - 6; i < gs->n_ratchet; i++) { printf ("%7.3lf ", gs->ratchet_score[i]); } printf ("\n");
   gs->next_avail = gs->n_ratchet - 1; // idx of currently worse tree (which is just before best tree in a ratchet)
 
   del_empfreq_double (ef);
@@ -561,8 +561,8 @@ sorting_of_gene_sptrees_ratchet_without_optimisation (gene_sptrees gs, topology_
   for (i=0; i < gs->n_ratchet; i++) gs->ratchet_score[i] = ef->d[i].freq; // doesnt need pivot since ef->freqs came from ratchet_score[]
   gs->best_score = ef->d[0].freq; // lowest (best) score is first element (may need to be recalc every time new proposals are created, using new minima)
   fprintf (stderr, "Ordered list of best scores: ");
-  for (i = 0; i < 5; i++) printf ("%7.3lf ", gs->ratchet_score[i]);   printf (" ...... ");
-  for (i = gs->n_ratchet - 6; i < gs->n_ratchet; i++) printf ("%7.3lf ", gs->ratchet_score[i]);   printf ("\n");
+  for (i = 0; i < 5; i++) { printf ("%7.3lf ", gs->ratchet_score[i]); } printf (" ...... ");
+  for (i = gs->n_ratchet - 6; i < gs->n_ratchet; i++) { printf ("%7.3lf ", gs->ratchet_score[i]); } printf ("\n");
   gs->next_avail = gs->n_ratchet - 1; // idx of currently worse tree (which is just before best tree in a ratchet)
 
   del_empfreq_double (ef);
@@ -622,26 +622,25 @@ improve_gene_sptrees_ratchet (gene_sptrees gs, int n_iterations)
 void
 generate_new_gene_sptrees_proposal_trees (gene_sptrees gs, int idx, int iteration)
 {
-  int coinflip = 0;
   int i, j;
   for (i = 0; i < gs->n_proposal; i++) copy_topology_from_topology (gs->proposal[i], gs->ratchet[idx]);
   if (!(iteration%2)) {
     for (i = 0; i < gs->n_proposal; i++) {
       topology_apply_rerooting (gs->proposal[i], false);
-      for (j = 0; j < biomcmc_rng_unif_int (3); j++) topology_apply_shortspr (gs->proposal[i], false);
-      for (j = 0; j < biomcmc_rng_unif_int (2); j++) topology_apply_nni (gs->proposal[i], false);
+      for (j = 0; j < (int) biomcmc_rng_unif_int (3); j++) topology_apply_shortspr (gs->proposal[i], false);
+      for (j = 0; j < (int) biomcmc_rng_unif_int (2); j++) topology_apply_nni (gs->proposal[i], false);
     }
   }
   if (!((iteration+1)%2)) {
     for (i = 0; i < gs->n_proposal; i++) {
-      for (j = 0; j <= biomcmc_rng_unif_int (3); j++) topology_apply_nni (gs->proposal[i], false);
-      for (j = 0; j <  biomcmc_rng_unif_int (3); j++) topology_apply_spr_unrooted (gs->proposal[i], false);
+      for (j = 0; j <= (int) biomcmc_rng_unif_int (3); j++) topology_apply_nni (gs->proposal[i], false);
+      for (j = 0; j <  (int) biomcmc_rng_unif_int (3); j++) topology_apply_spr_unrooted (gs->proposal[i], false);
     }
   }
   // if rooted trees are the same, randomise one of them (assuming random tree won't be the same anymore...)
   for (i = 0; i < gs->n_proposal; i++) {
-    for (j = 0; j < i; j++) if (topology_is_equal (gs->proposal[i], gs->proposal[j])) { randomize_topology (gs->proposal[i]); j = i; }
-    if (j < i) for (j = 0; j < gs->n_ratchet; j++) if (topology_is_equal (gs->proposal[i], gs->ratchet[j])) { randomize_topology (gs->proposal[i]); j = gs->n_ratchet; }
+    for (j = 0; j < i; j++) if (topology_is_equal (gs->proposal[i], gs->proposal[j])) { randomise_topology (gs->proposal[i]); j = i; }
+    if (j < i) for (j = 0; j < gs->n_ratchet; j++) if (topology_is_equal (gs->proposal[i], gs->ratchet[j])) { randomise_topology (gs->proposal[i]); j = gs->n_ratchet; }
   }
   return;
 }
@@ -671,11 +670,11 @@ generate_new_gene_sptrees_proposal_trees_deterministic (gene_sptrees gs, int idx
     }
   }
   // if rooted trees are the same, randomise one of them (assuming random tree won't be the same anymore...)
-  for (i = 0; i < gs->n_proposal; i++) for (j = 0; j < i; j++) if (topology_is_equal (gs->proposal[i], gs->proposal[j])) randomize_topology (gs->proposal[j]); 
+  for (i = 0; i < gs->n_proposal; i++) for (j = 0; j < i; j++) if (topology_is_equal (gs->proposal[i], gs->proposal[j])) randomise_topology (gs->proposal[j]); 
   for (i = 0; i < gs->n_proposal; i++) {
     coinflip = biomcmc_rng_unif_int (10); 
     if (coinflip < 2) topology_apply_spr_unrooted (gs->proposal[i], false); // 2/10 chance
-    if (coinflip > 8) randomize_topology (gs->proposal[i]); // 1/10 chance
+    if (coinflip > 8) randomise_topology (gs->proposal[i]); // 1/10 chance
   }
   return;
 }

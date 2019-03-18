@@ -88,7 +88,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = supersp$(EXEEXT)
+bin_PROGRAMS = super_distance$(EXEEXT) super_parsimony$(EXEEXT)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -104,16 +104,21 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_supersp_OBJECTS = supersp_main.$(OBJEXT)
-supersp_OBJECTS = $(am_supersp_OBJECTS)
-supersp_LDADD = $(LDADD)
+am_super_distance_OBJECTS = supersp_main.$(OBJEXT)
+super_distance_OBJECTS = $(am_super_distance_OBJECTS)
+super_distance_LDADD = $(LDADD)
 am__DEPENDENCIES_1 =
-supersp_DEPENDENCIES = ../lib/libsuper_sptree.la \
+super_distance_DEPENDENCIES = ../lib/libsuper_sptree.la \
 	../biomcmc-lib/lib/libbiomcmc.la $(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+am_super_parsimony_OBJECTS = mrp_main.$(OBJEXT)
+super_parsimony_OBJECTS = $(am_super_parsimony_OBJECTS)
+super_parsimony_LDADD = $(LDADD)
+super_parsimony_DEPENDENCIES = ../lib/libsuper_sptree.la \
+	../biomcmc-lib/lib/libbiomcmc.la $(am__DEPENDENCIES_1)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -148,8 +153,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(supersp_SOURCES)
-DIST_SOURCES = $(supersp_SOURCES)
+SOURCES = $(super_distance_SOURCES) $(super_parsimony_SOURCES)
+DIST_SOURCES = $(super_distance_SOURCES) $(super_parsimony_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -301,7 +306,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = $(GTKDEPS_CFLAGS) -I$(srcdir)/../lib -I$(srcdir)/../biomcmc-lib/lib  @OPENMP_CPPFLAGS@
 LDADD = $(GTKDEPS_LIBS) ../lib/libsuper_sptree.la ../biomcmc-lib/lib/libbiomcmc.la  $(AM_LDFLAGS)
-supersp_SOURCES = supersp_main.c
+super_distance_SOURCES = supersp_main.c
+super_parsimony_SOURCES = mrp_main.c
 all: all-am
 
 .SUFFIXES:
@@ -385,9 +391,13 @@ clean-binPROGRAMS:
 	echo " rm -f" $$list; \
 	rm -f $$list
 
-supersp$(EXEEXT): $(supersp_OBJECTS) $(supersp_DEPENDENCIES) $(EXTRA_supersp_DEPENDENCIES) 
-	@rm -f supersp$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(supersp_OBJECTS) $(supersp_LDADD) $(LIBS)
+super_distance$(EXEEXT): $(super_distance_OBJECTS) $(super_distance_DEPENDENCIES) $(EXTRA_super_distance_DEPENDENCIES) 
+	@rm -f super_distance$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(super_distance_OBJECTS) $(super_distance_LDADD) $(LIBS)
+
+super_parsimony$(EXEEXT): $(super_parsimony_OBJECTS) $(super_parsimony_DEPENDENCIES) $(EXTRA_super_parsimony_DEPENDENCIES) 
+	@rm -f super_parsimony$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(super_parsimony_OBJECTS) $(super_parsimony_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -395,6 +405,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/mrp_main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/supersp_main.Po@am__quote@
 
 .c.o:

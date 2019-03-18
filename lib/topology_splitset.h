@@ -23,7 +23,7 @@
 #ifndef _biomcmc_topology_splitset_h_
 #define _biomcmc_topology_splitset_h_
 
-#include "topology_common.h"
+#include <biomcmc.h> 
 
 typedef struct splitset_struct* splitset;
 

@@ -20,11 +20,11 @@ void create_parent_node_from_children (topology tree, int parent, int lchild, in
 bool topology_apply_shortspr_weighted_subtree (topology tree, topol_node lca, double *prob, double scale, bool update_done);
 
 void
-randomize_topology (topology tree)
+randomise_topology (topology tree)
 { 
   int i, lchild, rchild, parent = tree->nleaves, *idx = tree->index, n_idx = tree->nleaves;
 
-  /* tree->index is also used by quasi_randomize_topology(), and here we tell it the info was destroyed */
+  /* tree->index is also used by quasi_randomise_topology(), and here we tell it the info was destroyed */
   tree->quasirandom = false;
 
   for (i=0; i < n_idx; i++) idx[i] = i;
@@ -50,7 +50,7 @@ randomize_topology (topology tree)
 }
 
 void
-quasi_randomize_topology (topology tree, int sample_type)
+quasi_randomise_topology (topology tree, int sample_type)
 { 
   int i, lchild, rchild, parent = tree->nleaves, swap;
   int *taxa_idx = tree->index, 
@@ -115,7 +115,7 @@ upgma_from_distance_matrix (topology tree, distance_matrix dist, bool single_lin
       *min_by_row = tree->index + 2 * tree->nleaves; /* column having min value for each row */
   double *dst_by_row, dst_row, new_dist, *gsize, *height, gs1, gs2;
 
-  /* tree->index is also used by quasi_randomize_topology(), and here we tell it the info was destroyed */
+  /* tree->index is also used by quasi_randomise_topology(), and here we tell it the info was destroyed */
   tree->quasirandom = false;
   
   if (!tree->blength) topology_malloc_blength (tree);
@@ -230,7 +230,7 @@ bionj_from_distance_matrix (topology tree, distance_matrix dist)
       *idxtree = tree->index + tree->nleaves;        /* indexes in tree (since have values > nleaves) */
   double **delta, Q_min, Q_ij, var_1_2, diff_1_2, blen_1, blen_2, lambda;
 
-  /* tree->index is also used by quasi_randomize_topology(), and here we tell it the info was destroyed */
+  /* tree->index is also used by quasi_randomise_topology(), and here we tell it the info was destroyed */
   tree->quasirandom = false;
   
   if (!tree->blength) topology_malloc_blength (tree);
@@ -437,7 +437,7 @@ topology_apply_rerooting (topology tree, bool update_done)
   int i, n1 = 0, n_valid = 0, n_invalid = 0,
       *valid = tree->index, *invalid = tree->index + tree->nnodes; /* index has size 4*nleaves = 2*nnodes + 2 */
 
-  /* tree->index is also used by quasi_randomize_topology(), and here we tell it the info was destroyed */
+  /* tree->index is also used by quasi_randomise_topology(), and here we tell it the info was destroyed */
   tree->quasirandom = false;
 
   invalid[n_invalid++] = tree->root->id; /* root and its children are the only forbidden regraft nodes */ 
@@ -462,8 +462,8 @@ topology_apply_shortspr (topology tree, bool update_done)
   bool success = false;
   double scale = 1./tree->nleaves;
   int i;
-  /* tree->index is also used by quasi_randomize_topology(), and here we tell it the sequence was destroyed */
-  tree->quasirandom = false; /* IOW, quasi_randomize() will have to start from scratch */
+  /* tree->index is also used by quasi_randomise_topology(), and here we tell it the sequence was destroyed */
+  tree->quasirandom = false; /* IOW, quasi_randomise() will have to start from scratch */
   if (!tree->traversal_updated) update_topology_traversal (tree);
 
   for (i = 0; (!success) && (i < 4); i++) {
@@ -481,8 +481,8 @@ topology_apply_shortspr_weighted (topology tree, double *prob, bool update_done)
   double scale = 1., *localprob = NULL;
   int i;
 
-  /* tree->index is also used by quasi_randomize_topology(), and here we tell it the sequence was destroyed */
-  tree->quasirandom = false; /* IOW, quasi_randomize() will have to start from scratch */
+  /* tree->index is also used by quasi_randomise_topology(), and here we tell it the sequence was destroyed */
+  tree->quasirandom = false; /* IOW, quasi_randomise() will have to start from scratch */
   if (!tree->traversal_updated) update_topology_traversal (tree);
 
   for (i = 0; (!success) && (i < 8); i++) {
@@ -575,7 +575,7 @@ topology_apply_spr_on_subtree (topology tree, topol_node lca, bool update_done)
   int i, n1, n2, *valid = tree->index, *invalid, *regraft, n_valid = 0, n_invalid = 0, n_regraft = 0;
   topol_node first_child = lca;
 
-  /* tree->index is also used by quasi_randomize_topology(), and here we tell it the info was destroyed */
+  /* tree->index is also used by quasi_randomise_topology(), and here we tell it the info was destroyed */
   tree->quasirandom = false;
 
   if (lca == tree->root) biomcmc_error ("root node is not eligible for SPR move (maybe root->left or root->right?)");
@@ -659,7 +659,7 @@ topology_apply_spr_unrooted (topology tree, bool update_done)
 
   if (tree->nleaves < 4) return; /* There is only one unrooted triplet */
   if (!tree->traversal_updated) update_topology_traversal (tree);
-  /* tree->index is also used by quasi_randomize_topology(), and here we tell it the info was destroyed */
+  /* tree->index is also used by quasi_randomise_topology(), and here we tell it the info was destroyed */
   tree->quasirandom = false;
   if (tree->nleaves == 4) { /* special case, furthermore can be simplified */
     if (!tree->root->right->internal) { /* (((a,b),c),d) --> a or b regrafted to d (OR,equiv, regrafted to c) */
@@ -730,7 +730,7 @@ topology_apply_nni (topology tree, bool update_done)
    *
    * UPDATE 2010.07.27: this function seems to be buggy (does not respect rooting) */
 
-  /* tree->index is also used by quasi_randomize_topology(), and here we tell it the info was destroyed */
+  /* tree->index is also used by quasi_randomise_topology(), and here we tell it the info was destroyed */
   tree->quasirandom = false;
 
   invalid[n_invalid++] = tree->root->id; /* root is forbidden prune node (otherwise we have rerooting) */

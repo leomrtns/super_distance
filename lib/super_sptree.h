@@ -27,7 +27,6 @@
 #include "topology_build.h"
 
 #ifdef THESE_ARE_COMMENTS
-#include "topology_common.h" // called by topology_mrca.h, topology_build.h and topology_splitset.h
 #include "topology_splitset.h" // called by topology_space.h
 #endif // of THESE_ARE_COMMENTS
 

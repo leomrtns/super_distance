@@ -40,7 +40,7 @@
 #ifndef _biomcmc_topology_mrca_h_
 #define _biomcmc_topology_mrca_h_
 
-#include "topology_common.h"
+#include <biomcmc.h> 
 
 /*! \brief Allocate space for mrca structure (a triangular matrix) */
 void new_mrca_for_topology (topology t); 
