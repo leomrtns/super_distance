@@ -29,7 +29,7 @@ main (int argc, char **argv)
   int i, score, *idx_gene_to_sp = NULL;
   topology_space genetre;
   topology sptree;
-  mrp_parsimony mrp;
+  binary_parsimony pars;
   empfreq ef;
 
   time0 = clock ();
@@ -42,13 +42,13 @@ main (int argc, char **argv)
   char_vector_longer_first_order (species); // order species names from longest to shortest (speed up gene/spnames comparison) 
   ef = new_empfreq_sort_decreasing (species->nchars, species->nstrings, 1); /* 1=size_t (0=char, 2=int)*/
 
-  mrp = new_mrp_parsimony(species->nstrings, argc * (species->nstrings -1)); /* no sptree information, just a matrix from genetrees */
+  pars = new_binary_parsimony (species->nstrings); /* no sptree information, just a matrix from genetrees */
 
   for (i = 2; i < argc; i++) { /* scan through gene files */
     genetre  = read_topology_space_from_file (argv[i], NULL, false);// read i-th gene family; false -> neglects rooting
     idx_gene_to_sp = (int *) biomcmc_realloc ((int*) idx_gene_to_sp, genetre->distinct[0]->nleaves * sizeof (int));/* for each gene leaf, index of species */
     index_sptaxa_to_genetaxa (species, genetre->taxlabel, idx_gene_to_sp, ef);/* map species names to gene names and store into idx[] */
-    update_binary_mrp_matrix_from_topology (mrp->external, genetre->distinct[0], idx_gene_to_sp);
+    update_binary_parsimony_from_topology (pars, genetre->distinct[0], idx_gene_to_sp);
     del_topology_space (genetre); 
   }
 
