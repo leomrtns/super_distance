@@ -59,17 +59,17 @@ main (int argc, char **argv)
   
   time1 = clock (); fprintf (stderr, "timing: %.8f secs\n\n", (double)(time1-time0)/(double)CLOCKS_PER_SEC); time0 = time1;
 
-  for (i=0; i < 10; i++) {
+  for (i=0; i < 50; i++) {
     topology_apply_spr_unrooted (sptree, false);
-    score = binary_mrp_parsimony_score_of_topology (mrp, sptree);
+    score = binary_parsimony_score_of_topology (pars, sptree);
     s = topology_to_string_by_name (sptree, NULL);
-    printf (" %6d\t %s; \n", score, s); 
+    printf (" %12d\t %s; \n", score, s); free (s); 
   }
 
   del_char_vector (species);
   if (idx_gene_to_sp) free (idx_gene_to_sp);
   del_empfreq (ef);
-  del_mrp_parsimony (mrp);
+  del_binary_parsimony (pars);
   del_topology (sptree);
   biomcmc_random_number_finalize();
 
