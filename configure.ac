@@ -33,6 +33,8 @@ dnl         (checked with "ifdef _OPENMP"); user can disable it through "--disab
 AC_OPENMP
 AC_SUBST(OPENMP_CFLAGS)
 AC_SUBST(OPENMP_CPPFLAGS)
+dnl unit tests in for "make check"
+PKG_CHECK_MODULES([CHECK], [check >= 0.9.10])
 
 dnl library checks (math etc.) are done by biomcmc-lib
 
@@ -82,7 +84,7 @@ AC_SUBST([MPI_CXXLIBS])
 AC_SUBST([MPI_CXXFLAGS])
 
 dnl generate makefiles (last recipes, after defining CFLAGS etc.)
-AC_CONFIG_FILES([ Makefile lib/Makefile src/Makefile])
+AC_CONFIG_FILES([ Makefile lib/Makefile src/Makefile tests/Makefile])
 
 # Call biomcmc-lib ./configure script recursively.
 AC_CONFIG_SUBDIRS([biomcmc-lib])
