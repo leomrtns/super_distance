@@ -300,7 +300,7 @@ finalise_pooled_matrix (pooled_matrix pool, char_vector sptaxa)
   finalise_spdist_matrix (pool->d_total);
   if (pool->d_total->n_missing) fprintf (stderr, "OBS: %d species pair combinations never appear on same gene familiy\n", pool->d_total->n_missing);
   for (i = 0; i < sptaxa->nstrings; i++) if (!pool->d_total->species_present[i])
-    fprintf (stderr, "OBS: species \'%s\' never appears in data set; consider removing it from name list\n", sptaxa->string[i]);
+    fprintf (stderr, "OBS: species \'%s\' never appears in data set; consider removing it from name list. Multifurcations also make this mess\n", sptaxa->string[i]);
   for (i = 0; i < pool->n_sptrees; i++) {
     finalise_spdist_matrix (pool->d[i]);
     complete_missing_spdist_from_global_spdist (pool->d[i], pool->d_total);
