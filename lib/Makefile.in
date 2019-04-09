@@ -133,8 +133,7 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(otherincludedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libsuper_sptree_la_LIBADD =
-am__objects_1 = topology_space.lo topology_mrca.lo topology_build.lo \
-	topology_splitset.lo super_sptree.lo
+am__objects_1 = topology_space.lo topology_build.lo super_sptree.lo
 am_libsuper_sptree_la_OBJECTS = $(am__objects_1)
 libsuper_sptree_la_OBJECTS = $(am_libsuper_sptree_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -336,14 +335,14 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = $(GTKDEPS_CFLAGS)  @OPENMP_CPPFLAGS@ -I$(srcdir)/../biomcmc-lib/lib
 LDADD = $(GTKDEPS_LIBS) $(AM_LDFLAGS) ../biomcmc-lib/lib/libbiomcmc.la
-common_headers = topology_space.h topology_mrca.h topology_build.h \
-                 topology_splitset.h super_sptree.h
+common_headers = topology_space.h topology_build.h \
+                 super_sptree.h
 
-common_src = topology_space.c topology_mrca.c topology_build.c \
-                 topology_splitset.c super_sptree.c
+common_src = topology_space.c topology_build.c \
+                 super_sptree.c
 
 lib_LTLIBRARIES = libsuper_sptree.la   ## change to noinst_LT... if should be linked statically (not installed globally)
-otherincludedir = $(includedir)/super_sptree
+otherincludedir = $(includedir)/super_sptree  ## make sure all headers go to directory 
 otherinclude_HEADERS = config.h $(common_headers)
 libsuper_sptree_la_SOURCES = $(common_src) 
 all: config.h
@@ -442,9 +441,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/super_sptree.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/topology_build.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/topology_mrca.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/topology_space.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/topology_splitset.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

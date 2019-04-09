@@ -23,12 +23,7 @@
 
 #include <biomcmc.h> 
 #include "topology_space.h"
-#include "topology_mrca.h"
 #include "topology_build.h"
-
-#ifdef THESE_ARE_COMMENTS
-#include "topology_splitset.h" // called by topology_space.h
-#endif // of THESE_ARE_COMMENTS
 
 /*! \brief given a gene tree and a group of species trees, both in newick format, return the spectrum of unnormalized distances */
 int genefam_module_treesignal_fromtrees (const char *gtree_str, const char *splist_str, double **output_distances);

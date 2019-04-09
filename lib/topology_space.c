@@ -186,9 +186,7 @@ add_topology_to_topology_space_if_distinct (topology topol, topology_space tsp, 
   /* comparison includes root location (faster than unrooted since uses hash) */ 
   for (i=0; (i < tsp->ndistinct) && (found_id < 0); i++) if (topology_is_equal (topol, tsp->distinct[i])) found_id = i;
   if ((!use_root_location) && (tsp->ndistinct) && (found_id < 0)) { /* if they look distinct (different root), then do slower unrooted calculation */ 
-    splitset split = new_splitset (topol->nleaves);
-    for (i=0; (i < tsp->ndistinct) && (found_id < 0); i++) if (topology_is_equal_unrooted (topol, tsp->distinct[i], split, i)) found_id = i;
-    del_splitset (split);
+    for (i=0; (i < tsp->ndistinct) && (found_id < 0); i++) if (topology_is_equal_unrooted (topol, tsp->distinct[i], true)) found_id = i;
   }
 
   if (found_id >= 0) {
@@ -362,9 +360,7 @@ merge_topology_spaces (topology_space ts1, topology_space ts2, double weight_ts1
     /* comparison includes root location (faster than unrooted since uses hash) */ 
     for (i=0; (i < n_idx) && (found_id < 0); i++) if (topology_is_equal (ts2->distinct[j], ts1->distinct[idx[i]] )) found_id = i;
     if ((!use_root_location) && (found_id < 0)) { /* if they look distinct (different root), then do slower unrooted calculation */ 
-      splitset split = new_splitset (ts2->distinct[j]->nleaves);
-      for (i=0; (i < n_idx) && (found_id < 0); i++) if (topology_is_equal_unrooted (ts2->distinct[j], ts1->distinct[idx[i]], split, i)) found_id = i;
-      del_splitset (split);
+      for (i=0; (i < n_idx) && (found_id < 0); i++) if (topology_is_equal_unrooted (ts2->distinct[j], ts1->distinct[idx[i]], true)) found_id = i;
     }
     if (found_id >= 0) {
       ts1->freq[ idx[found_id] ] += ts2->freq[j];
@@ -554,7 +550,6 @@ add_tree_to_topology_space (topology_space tsp, const char *string, bool transla
   int i, index, *original_order;
   char *local_string;
   double treelength = 0.;
-  splitset split;
   nexus_tree tree;
   topology topol;
 
@@ -685,12 +680,10 @@ add_tree_to_topology_space (topology_space tsp, const char *string, bool transla
 
   tsp->tree = (topology*) biomcmc_realloc ((topology*) tsp->tree, sizeof (topology) * (tsp->ntrees+1));
 
-  split = new_splitset (topol->nleaves);
   /* distinct trees might have same unrooted info, but rooted calculation is faster */
   for (i=0; (i < tsp->ndistinct) && (found_id < 0); i++) if (topology_is_equal (topol, tsp->distinct[i])) found_id = i;
   if ((!use_root_location) && (found_id < 0)) /* if they look distinct (different root), then do slower unrooted calculation */ 
-    for (i=0; (i < tsp->ndistinct) && (found_id < 0); i++) if (topology_is_equal_unrooted (topol, tsp->distinct[i], split, i)) found_id = i;
-  del_splitset (split);
+    for (i=0; (i < tsp->ndistinct) && (found_id < 0); i++) if (topology_is_equal_unrooted (topol, tsp->distinct[i], true)) found_id = i;
   // FIXME: better solution is to have vector of splits for each tree, since slowest part is to copy/order bipartitions 
 
   if (found_id >= 0) {
