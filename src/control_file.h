@@ -23,5 +23,12 @@
 #include <mpi.h>
 #endif
 
+typedef struct
+{
+  struct arg_lit  *help;
+  struct arg_file *file;
+  struct arg_end  *end;
+  void **argtable;
+} arg_parameters;
 
 #endif
