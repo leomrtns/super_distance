@@ -8,13 +8,16 @@ get_species_names_from_newick_space (newick_space g_nwk, char_vector spnames)
   int i, *sp_count, *valid, n_valid = 0;
   char_vector vec;
   sp_count = (int *) biomcmc_malloc (spnames->nstrings * sizeof (int));
-  for (i=0; i < spnames->nstrings; i++) sp_count[i] = 0;
+  valid = (int *) biomcmc_malloc (spnames->nstrings * sizeof (int));
+  for (i=0; i < spnames->nstrings; i++) valid[i] = sp_count[i] = 0;
   for (i=0; i < g_nwk->ntrees; i++) update_species_count_from_gene_char_vector (spnames, g_nwk->t[i]->taxlabel, sp_count);
   for (i=0; i < spnames->nstrings; i++) if (sp_count[i] > 0) valid[n_valid++] = i;
   if (n_valid == spnames->nstrings) {spnames->ref_counter++; return spnames; }
 
   vec = new_char_vector_from_valid_strings_char_vector (spnames, valid, n_valid);
   char_vector_reorder_by_size_or_lexicographically (vec, false, NULL); // false/true -> by size/lexico
+  if (sp_count) free (sp_count);
+  if (valid) free (valid);
   return vec;
 }
 
@@ -50,13 +53,13 @@ find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, bool
     patristic_distances_from_topology_to_vectors (g_nwk->t[i], d_w, d_u, 1e-5); //TODO 1: transform/rescale brlens
     index_species_gene_char_vectors (species_names, g_nwk->t[i]->taxlabel, sp_idx_in_gene, NULL);
     zero_all_spdist_matrix (dm_local, false);
-    fill_spdistmatrix_from_gene_dist_vector (dm_local, d_w, n_pairs, sp_idx_in_gene);
+    fill_spdistmatrix_from_gene_dist_vector (dm_local, d_w, g_nwk->t[i]->nleaves, sp_idx_in_gene);
     update_spdistmatrix_from_spdistmatrix (dm_glob_w, dm_local);
     zero_all_spdist_matrix (dm_local, false);
-    fill_spdistmatrix_from_gene_dist_vector (dm_local, d_u, n_pairs, sp_idx_in_gene);
+    fill_spdistmatrix_from_gene_dist_vector (dm_local, d_u, g_nwk->t[i]->nleaves, sp_idx_in_gene);
     update_spdistmatrix_from_spdistmatrix (dm_glob_u, dm_local);
   }
-  if (dm_glob_w->n_missing) fprintf (stderr, "OBS: %d species pair combinations never appear on same gene familiy\n", dm_glob_w->n_missing);
+  if (dm_glob_w->n_missing) fprintf (stderr, "OBS: %d species pair combinations never appear on same gene family\n", dm_glob_w->n_missing);
   finalise_spdist_matrix (dm_glob_w); // TODO 2: rescale matrices (now are rescaled to one
   finalise_spdist_matrix (dm_glob_u);
 

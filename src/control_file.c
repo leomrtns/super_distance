@@ -6,8 +6,6 @@ void print_usage (arg_parameters params, char *progname);
 arg_parameters
 get_parameters_from_argv (int argc, char **argv)
 {
-  int i;
-
   arg_parameters params = {
     .help = arg_litn("h","help",0, 1, "print a longer help and exit"),
     .file = arg_filen("S","species" ,NULL, 1, argc-2, "file with species names, one name per line (nexus-style bracketed comments are allowed)"),
@@ -35,7 +33,7 @@ print_usage (arg_parameters params, char *progname)
   printf ("The complete syntax is:\n\n %s ", basename(progname));
   arg_print_syntaxv (stdout, params.argtable, "\n\n");
   arg_print_glossary(stdout, params.argtable,"  %-28s %s\n");
-  arg_freetable (params.argtable, sizeof(params.argtable)/sizeof(params.argtable[0]));
+  arg_freetable (params.argtable, 3);
   exit (EXIT_FAILURE);
 }
 
@@ -44,6 +42,6 @@ main (int argc, char **argv)
 {
   arg_parameters params = get_parameters_from_argv (argc, argv);
   printf ("result: %s\n", params.file->filename[0]);
-  arg_freetable (params.argtable, sizeof(params.argtable)/sizeof(params.argtable[0]));
+  arg_freetable (params.argtable, 3);
   return EXIT_SUCCESS;
 }
