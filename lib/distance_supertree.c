@@ -1,6 +1,6 @@
 #include "distance_supertree.h" 
 
-void find_maxtree_and_add_to_newick_space (spdist_matrix dist, distance_matrix square, newick_space nwk, int tree_method, bool use_within_gf_means);
+void find_maxtree_and_add_to_newick_space (spdist_matrix dist, distance_matrix square, char_vector spnames, newick_space nwk, int tree_method, bool use_within_gf_means);
 
 char_vector
 get_species_names_from_newick_space (newick_space g_nwk, char_vector spnames)
@@ -13,7 +13,7 @@ get_species_names_from_newick_space (newick_space g_nwk, char_vector spnames)
   for (i=0; i < spnames->nstrings; i++) if (sp_count[i] > 0) valid[n_valid++] = i;
   if (n_valid == spnames->nstrings) {spnames->ref_counter++; return spnames; }
 
-  vec = new_char_vector_from_valid_strings_char_vector (spnames, int *valid, int n_valid);
+  vec = new_char_vector_from_valid_strings_char_vector (spnames, valid, n_valid);
   char_vector_reorder_by_size_or_lexicographically (vec, false, NULL); // false/true -> by size/lexico
   return vec;
 }
@@ -56,17 +56,17 @@ find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, bool
     fill_spdistmatrix_from_gene_dist_vector (dm_local, d_u, n_pairs, sp_idx_in_gene);
     update_spdistmatrix_from_spdistmatrix (dm_glob_u, dm_local);
   }
-  if (dm_glob_w->n_missing) fprintf (stderr, "OBS: %d species pair combinations never appear on same gene familiy\n", pool->d_total->n_missing);
+  if (dm_glob_w->n_missing) fprintf (stderr, "OBS: %d species pair combinations never appear on same gene familiy\n", dm_glob_w->n_missing);
   finalise_spdist_matrix (dm_glob_w); // TODO 2: rescale matrices (now are rescaled to one
   finalise_spdist_matrix (dm_glob_u);
 
   // TODO 3: skip matrices if too similar (e.g. orthologous groups lead to mean==min within) 
   /* 3. find upgma and bionj trees, for both unweighted and weighted distance matrices */
   for (i = 0; i < 3; i++) { 
-    find_maxtree_and_add_to_newick_space (dm_glob_w, square, species_nwk, i, false);
-    find_maxtree_and_add_to_newick_space (dm_glob_u, square, species_nwk, i, false);
-    find_maxtree_and_add_to_newick_space (dm_glob_w, square, species_nwk, i, true);
-    find_maxtree_and_add_to_newick_space (dm_glob_u, square, species_nwk, i, true);
+    find_maxtree_and_add_to_newick_space (dm_glob_w, square, species_names, species_nwk, i, false);
+    find_maxtree_and_add_to_newick_space (dm_glob_u, square, species_names, species_nwk, i, false);
+    find_maxtree_and_add_to_newick_space (dm_glob_w, square, species_names, species_nwk, i, true);
+    find_maxtree_and_add_to_newick_space (dm_glob_u, square, species_names, species_nwk, i, true);
   }
 
   if (d_w) free (d_w);
@@ -81,7 +81,7 @@ find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, bool
 }
 
 void
-find_maxtree_and_add_to_newick_space (spdist_matrix dist, distance_matrix square, newick_space nwk, int tree_method, bool use_within_gf_means)
+find_maxtree_and_add_to_newick_space (spdist_matrix dist, distance_matrix square, char_vector spnames, newick_space nwk, int tree_method, bool use_within_gf_means)
 {
   topology maxtree;
   copy_spdist_matrix_to_distance_matrix_upper (dist, square, use_within_gf_means);

@@ -2,9 +2,7 @@ AM_CPPFLAGS = $(GTKDEPS_CFLAGS) -I$(srcdir)/../lib -I$(srcdir)/../biomcmc-lib/li
 AM_CFLAGS = @AM_CFLAGS@  @OPENMP_CFLAGS@
 LDADD = $(GTKDEPS_LIBS) ../lib/libsuper_sptree.la ../biomcmc-lib/lib/libbiomcmc.la  $(AM_LDFLAGS)
 
-#bin_PROGRAMS = super_distance super_parsimony control 
-bin_PROGRAMS = control 
+bin_PROGRAMS = control super_distance 
 
-#super_distance_SOURCES = supersp_main.c
-#super_parsimony_SOURCES = mrp_main.c
+super_distance_SOURCES = super_distance.c super_distance.h
 control_SOURCES = control_file.c control_file.h

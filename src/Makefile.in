@@ -88,7 +88,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = control$(EXEEXT)
+bin_PROGRAMS = control$(EXEEXT) super_distance$(EXEEXT)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -114,6 +114,11 @@ AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+am_super_distance_OBJECTS = super_distance.$(OBJEXT)
+super_distance_OBJECTS = $(am_super_distance_OBJECTS)
+super_distance_LDADD = $(LDADD)
+super_distance_DEPENDENCIES = ../lib/libsuper_sptree.la \
+	../biomcmc-lib/lib/libbiomcmc.la $(am__DEPENDENCIES_1)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -129,7 +134,8 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)/lib
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/control_file.Po
+am__depfiles_remade = ./$(DEPDIR)/control_file.Po \
+	./$(DEPDIR)/super_distance.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -149,8 +155,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(control_SOURCES)
-DIST_SOURCES = $(control_SOURCES)
+SOURCES = $(control_SOURCES) $(super_distance_SOURCES)
+DIST_SOURCES = $(control_SOURCES) $(super_distance_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -307,9 +313,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = $(GTKDEPS_CFLAGS) -I$(srcdir)/../lib -I$(srcdir)/../biomcmc-lib/lib  @OPENMP_CPPFLAGS@
 LDADD = $(GTKDEPS_LIBS) ../lib/libsuper_sptree.la ../biomcmc-lib/lib/libbiomcmc.la  $(AM_LDFLAGS)
-
-#super_distance_SOURCES = supersp_main.c
-#super_parsimony_SOURCES = mrp_main.c
+super_distance_SOURCES = super_distance.c super_distance.h
 control_SOURCES = control_file.c control_file.h
 all: all-am
 
@@ -398,6 +402,10 @@ control$(EXEEXT): $(control_OBJECTS) $(control_DEPENDENCIES) $(EXTRA_control_DEP
 	@rm -f control$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(control_OBJECTS) $(control_LDADD) $(LIBS)
 
+super_distance$(EXEEXT): $(super_distance_OBJECTS) $(super_distance_DEPENDENCIES) $(EXTRA_super_distance_DEPENDENCIES) 
+	@rm -f super_distance$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(super_distance_OBJECTS) $(super_distance_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -405,6 +413,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/control_file.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/super_distance.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -567,6 +576,7 @@ clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/control_file.Po
+	-rm -f ./$(DEPDIR)/super_distance.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -613,6 +623,7 @@ installcheck-am:
 
 maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/control_file.Po
+	-rm -f ./$(DEPDIR)/super_distance.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
