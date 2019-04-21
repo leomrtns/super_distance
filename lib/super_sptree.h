@@ -21,7 +21,6 @@
 #ifndef _super_sptree_h_
 #define _super_sptree_h_
 
-#include <biomcmc.h> 
-
+#include "distance_supertree.h"
 
 #endif
