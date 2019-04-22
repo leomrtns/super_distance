@@ -19,6 +19,7 @@ get_parameters_from_argv (int argc, char **argv)
   if (arg_nullcheck(argtable)) biomcmc_error ("Problem allocating memory for the argtable (command line arguments) structure");
   if (arg_parse (argc, argv, argtable)) print_usage (params, argv[0]);
   if (params.help->count) print_usage (params, argv[0]);
+  
   return params;
 }
 
