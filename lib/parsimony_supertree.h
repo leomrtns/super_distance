@@ -10,18 +10,19 @@
  * details (file "COPYING" or http://www.gnu.org/copyleft/gpl.html).
  */
 
-/*! \file distance_supertree.h
- *  \brief functions for carrying "matrix representation with distance" methods, including recent extensions for
+/*! \file parsimony_supertree.h
+ *  \brief functions for carrying "matrix representation with parsimony" methods, including experimental extensions to
  *  paralogous gene families
  *
  */
+#ifndef _parsimony_supertree_h_
+#define _parsimony_supertree_h_
 
-#ifndef _distance_supertree_h_
-#define _distance_supertree_h_
+#include "distance_supertree.h" 
 
-#include <biomcmc.h> 
-
-char_vector get_species_names_from_newick_space (newick_space g_nwk, char_vector spnames, bool check_spnames);
-newick_space find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, double tolerance, bool check_spnames, bool remove_reorder_when_check_spnames);
+/*! \brief initial MRP tree is found by nj/upgma on binary (bipartition matrices). #check_spnames true if
+ * get_species_names_from_newick_space() called before but now we are on subset. In this case
+ * #remove_reorder_when_check_spnames can be false */
+newick_space find_upgma_mrp_species_tree (newick_space g_nwk, char_vector spnames, bool check_spnames, bool remove_reorder_when_check_spnames);
 
 #endif

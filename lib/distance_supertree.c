@@ -3,10 +3,16 @@
 void find_maxtree_and_add_to_newick_space (spdist_matrix dist, distance_matrix square, char_vector spnames, newick_space nwk, int tree_method, bool use_within_gf_means);
 
 char_vector
-get_species_names_from_newick_space (newick_space g_nwk, char_vector spnames)
+get_species_names_from_newick_space (newick_space g_nwk, char_vector spnames, bool remove_reorder)
 {
   int i, *sp_count, *valid, n_valid = 0;
   char_vector vec;
+
+  if (remove_reorder) { // will change original spnames #char_vector 
+    char_vector_remove_duplicate_strings (spnames); /* duplicate names */
+    char_vector_reorder_by_size_or_lexicographically (spnames, false, NULL); // false/true -> by size/lexico
+  }
+
   sp_count = (int *) biomcmc_malloc (spnames->nstrings * sizeof (int));
   valid = (int *) biomcmc_malloc (spnames->nstrings * sizeof (int));
   for (i=0; i < spnames->nstrings; i++) valid[i] = sp_count[i] = 0;
@@ -21,7 +27,7 @@ get_species_names_from_newick_space (newick_space g_nwk, char_vector spnames)
 }
 
 newick_space
-find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, double tolerance, bool check_spnames)
+find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, double tolerance, bool check_spnames, bool remove_reorder_when_check_spnames)
 {
   int i, n_pairs, *sp_idx_in_gene = NULL;
   double *d_w = NULL, *d_u = NULL;
@@ -31,11 +37,11 @@ find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, doub
   newick_space species_nwk = new_newick_space ();
 
   /* 1. remove species absent from all genes */
-  if (check_spnames) { // will change original spnames #char_vector 
-    char_vector_remove_duplicate_strings (spnames); /* duplicate names */
-    char_vector_reorder_by_size_or_lexicographically (spnames, false, NULL); // false/true -> by size/lexico
+  if (check_spnames) species_names = get_species_names_from_newick_space (g_nwk, spnames, remove_reorder_when_check_spnames);
+  else {
+    species_names = spnames;
+    spnames->ref_counter++;
   }
-  species_names = get_species_names_from_newick_space (g_nwk, spnames);
   /* 1.5 create structures, remembering that dm_glob have only _means_ across loci */
   dm_glob_w = new_spdist_matrix (species_names->nstrings);
   dm_glob_u = new_spdist_matrix (species_names->nstrings);

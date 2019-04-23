@@ -26,6 +26,7 @@
 typedef struct
 {
   struct arg_lit  *help;
+  struct arg_str  *mode;
   struct arg_file *spname;
   struct arg_file *genfil;
   struct arg_file *outfil;

@@ -21,6 +21,6 @@
 #ifndef _super_sptree_h_
 #define _super_sptree_h_
 
-#include "distance_supertree.h"
+#include "parsimony_supertree.h"
 
 #endif
