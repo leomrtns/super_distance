@@ -40,7 +40,7 @@ del_arg_parameters (arg_parameters params)
 void 
 print_usage (arg_parameters params, char *progname)
 {
-  if (params.end->count) {
+  if (params.end->count && (!params.help->count)) {  // params.end holds error messages
     arg_print_errors(stdout, params.end, basename(progname));
     printf ("Error when reading arguments from command line\n\n");
   }
@@ -48,6 +48,9 @@ print_usage (arg_parameters params, char *progname)
   printf ("The complete syntax is:\n\n %s ", basename(progname));
   arg_print_syntaxv (stdout, params.argtable, "\n\n");
   arg_print_glossary(stdout, params.argtable,"  %-32s %s\n");
+  if (params.help->count) {
+    printf ("Longer help explanation to come\n");
+  }
   del_arg_parameters (params);
   exit (EXIT_FAILURE);
 }

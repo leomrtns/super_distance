@@ -5,8 +5,8 @@ void find_upgma_mrp_tree_and_add_to_newick_space (double *dists, char_vector spn
 newick_space
 find_upgma_mrp_species_tree (newick_space g_nwk, char_vector spnames, bool check_spnames, bool remove_reorder_when_check_spnames)
 {
-  int i, *sp_idx_in_gene = NULL;
-  double *d_w = NULL, *d_u = NULL;
+  int i,j, *sp_idx_in_gene = NULL;
+  double *d[3] = {NULL, NULL, NULL};
   char_vector species_names;
   binary_parsimony pars;
   newick_space species_nwk = new_newick_space ();
@@ -26,19 +26,17 @@ find_upgma_mrp_species_tree (newick_space g_nwk, char_vector spnames, bool check
     update_binary_parsimony_from_topology (pars, g_nwk->t[i], sp_idx_in_gene);
   }
   /* 3. create square distance_matrix */
-  d_w = (double *) biomcmc_malloc ((species_names->nstrings * (species_names->nstrings - 1)/2) * sizeof (double));
-  d_u = (double *) biomcmc_malloc ((species_names->nstrings * (species_names->nstrings - 1)/2) * sizeof (double));
 
-  pairwise_distances_from_binary_parsimony_datamatrix (pars->external, d_w, d_u);
+  for (i = 0; i < 3; i++) d[i] = (double *) biomcmc_malloc ((species_names->nstrings * (species_names->nstrings - 1)/2) * sizeof (double));
+
+  pairwise_distances_from_binary_parsimony_datamatrix (pars->external, d, 3);
 
   /* 3. find upgma and bionj trees, for both unweighted and weighted distance matrices */
-  for (i = 0; i < 3; i++) {
-    find_upgma_mrp_tree_and_add_to_newick_space (d_w, species_names, species_nwk, i);
-    find_upgma_mrp_tree_and_add_to_newick_space (d_u, species_names, species_nwk, i);
+  for (j = 0; j < 3; j++) for (i = 0; i < 3; i++) {
+    find_upgma_mrp_tree_and_add_to_newick_space (d[j], species_names, species_nwk, i);
   }
 
-  if (d_w) free (d_w);
-  if (d_u) free (d_u);
+  for (i = 2; i >= 0; i--) if (d[i]) free (d[i]);
   if (sp_idx_in_gene) free (sp_idx_in_gene);
   del_char_vector (species_names);
   return species_nwk;
@@ -59,7 +57,7 @@ find_upgma_mrp_tree_and_add_to_newick_space (double *dists, char_vector spnames,
   if (tree_method == 0) bionj_from_distance_matrix (maxtree, square); 
   else if (tree_method == 1) upgma_from_distance_matrix (maxtree, square, false); // false -> upgma, true -> single linkage 
   else upgma_from_distance_matrix (maxtree, square, true); // false -> upgma, true -> single linkage 
-  update_newick_space_from_topology (nwk, maxtree);
+  update_newick_space_from_topology (nwk, maxtree); /* not good results, specially for MRP */
   del_distance_matrix (square);
   return;
 }

@@ -8,6 +8,38 @@ The software is fast enough such that it can be added into workflows, and given 
 trees* or *gene families*) it produces a small set of output trees (*species trees*) that tries to summarise the
 information in the input trees. 
 
+## Installation
+### From source
+The instalation uses the autotools build system for compilation, and relies on the
+[biomcmc-lib](https://github.com/quadram-institute-bioscience/biomcmc-lib) library, which can be downloaded
+recursivelly:
+```[bash]
+/home/simpson/$ git clone --recursive git@github.com:quadram-institute-bioscience/super_sptree.git
+/home/simpson/$ mkdir build
+/home/simpson/$ cd build
+/home/simpson/$ ../super_sptree-master/configure --prefix=/usr/local
+/home/simpson/$ make; sudo make install
+```
+
+As seen above, it is usually good idea to compile the code on a dedicated clean directory (`build`, in the example). 
+The example above will install the `libsuper_sptree` globally, in `/usr/local`. 
+If you don't have administrative (*sudo*) priviledges you can chose a local directory, by replacing the two last lines
+with:
+```[bash]
+/home/simpson/$ ../super_sptree-master/configure --prefix=/home/simpson/local
+/home/simpson/$ make; make install
+```
+You can then run a battery of tests with
+```[bash]
+/home/simpson/$ make check
+```
+
+If you download the zip instead of git-cloning you will miss the the biomcmc-lib library, which is a submodule. In this
+case please [download it](https://github.com/quadram-institute-bioscience/biomcmc-lib) and unzip it below `super_sptree-master/`.
+
+## Usage 
+
+
 ### Mapping from genes to species
 The input trees don't need to have information on all species, which is the classic supertree setting. 
 They can also have the same species represented more than once, as when we have whole gene families with paralogs, 
@@ -53,8 +85,9 @@ available in such cases.
 
 ## Algorithms
 Currently several distance-based and one bipartition-based supertree methods are implemented.
+Multifurcating trees are allowed, since the polytomies are transformed into dicotomies of length zero. 
 
-### Distance-based
+### Distance-based, or MRD supertrees
 These methods are sometimes called "matrix representation with distances" (MRD), specially in the classic supertree
 context (where we don't have mul-trees). and are a generalisation of the ASTRID,
 NJst, STAR, and a few others. 
@@ -84,7 +117,7 @@ combinations, with a few caveats:
 
 As usual, some methods/combinations will make more sense than others.
 
-### Bipartition-based
+### Bipartition-based, or MRP supertrees
 These are the classic supertree approaches, also known as "matrix representation with parsimony" (MRP) since the
 maximum parsimony tree is inferred from the bipartition patterns.
 However we extended it to work with mul-trees, by looking at the species represented at both ends of each bipartition
@@ -93,38 +126,23 @@ However we extended it to work with mul-trees, by looking at the species represe
 The set of gene trees will generate a binary matrix where each row (sample) is a species and each column (dimension) is a 
 bipartition.
 For any given species tree the parsimony score can be calculated from this matrix. where missing data is coded
-accordingly.
+accordingly, and a initial state can be found through a clustering algorithm.
 This is a preferred algorithm for sparse data sets (i.e. gene trees don't have information about all species). 
+Several modifications of the basic algorithm are possible, as the maximum compatibility supertree or the quartet
+supertree (although we don't have plans of implementing the latter). 
 
+### Reconciliation, or median supertrees
+These are supertrees that try to minimise the distance from the set of input trees.
+They can be with respect to a particular tree-to-tree distance, or to a set of distances &mdash; in which case no single
+supertree will be a global optimum.
+Right now they neglect branch lengths, but work seamlessly with mul-trees. 
 
-## Installation
-### From source
-The instalation uses the autotools build system for compilation, and relies on the
-[biomcmc-lib](https://github.com/quadram-institute-bioscience/biomcmc-lib) library, which can be downloaded
-recursivelly:
-```[bash]
-/home/simpson/$ git clone --recursive git@github.com:quadram-institute-bioscience/super_sptree.git
-/home/simpson/$ mkdir build
-/home/simpson/$ cd build
-/home/simpson/$ ../super_sptree-master/configure --prefix=/usr/local
-/home/simpson/$ make; sudo make install
-```
-
-As seen above, it is usually good idea to compile the code on a dedicated clean directory (`build`, in the example). 
-The example above will install the `libsuper_sptree` globally, in `/usr/local`. 
-If you don't have administrative (*sudo*) priviledges you can chose a local directory, by replacing the two last lines
-with:
-```[bash]
-/home/simpson/$ ../super_sptree-master/configure --prefix=/home/simpson/local
-/home/simpson/$ make; make install
-```
-You can then run a battery of tests with
-```[bash]
-/home/simpson/$ make check
-```
-
-If you download the zip instead of git-cloning you will miss the the biomcmc-lib library, which is a submodule. In this
-case please [download it](https://github.com/quadram-institute-bioscience/biomcmc-lib) and unzip it below `super_sptree-master/`.
+### Consensus trees
+If all the input trees share the same leaf set (i.e. the same species, with no missing data), then we can estimate the
+consensus trees.
+In all supertree methods above we assume one sample tree per gene family, but here we can create weightings per gene
+tree file &mdash; nexus files are particularly suited for large collections since they have a translation table for leaf
+names, and allow for compact distributions of topologies (as in the `.trprobs` files of MrBayes, for instance).
 
 ## License 
 Copyright (C) 2019-today  [Leonardo de Oliveira Martins](https://github.com/leomrtns)

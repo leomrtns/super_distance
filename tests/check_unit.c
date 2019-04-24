@@ -6,7 +6,7 @@
 #define TEST_HARDERROR 99
 
 int
-main (int argc, char **argv)
+main ()
 {
   return TEST_SUCCESS; 
 }
