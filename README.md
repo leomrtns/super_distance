@@ -78,9 +78,9 @@ combinations, with a few caveats:
   2. We implemented both UPGMA and single-linkage clustering, besides the bioNJ implemenentation of the
      Neighbour-Joining algorithm. 
   3. We always scale the final pairwise distance matrix, before the clustering step. Branch lengths in original scale
-     can be recovered from subsets of gene trees (&#x126D4; *unfinished*). 
+     can be recovered from subsets of gene trees (&#x26D4; *unfinished*). 
   4. It is not uncommon to have a lot of missing information, for instance when two species are never seen together in
-     the same gene. In this case we estimate their pairwise distance from species in common ( &#x126D4; *unfinished*).
+     the same gene. In this case we estimate their pairwise distance from species in common ( &#x26D4; *unfinished*).
 
 As usual, some methods/combinations will make more sense than others.
 
@@ -88,7 +88,7 @@ As usual, some methods/combinations will make more sense than others.
 These are the classic supertree approaches, also known as "matrix representation with parsimony" (MRP) since the
 maximum parsimony tree is inferred from the bipartition patterns.
 However we extended it to work with mul-trees, by looking at the species represented at both ends of each bipartition
-(&#x126D4; *unfinished*, right now it works correctly with ortholog sets).
+(&#x26D4; *unfinished*, right now it works correctly with ortholog sets).
 
 The set of gene trees will generate a binary matrix where each row (sample) is a species and each column (dimension) is a 
 bipartition.
