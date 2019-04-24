@@ -52,7 +52,6 @@ It is worh mentioning that the software works equally well in the absence of mul
 available in such cases.
 
 ## Algorithms
-
 Currently several distance-based and one bipartition-based supertree methods are implemented.
 
 ### Distance-based
@@ -79,11 +78,24 @@ combinations, with a few caveats:
   2. We implemented both UPGMA and single-linkage clustering, besides the bioNJ implemenentation of the
      Neighbour-Joining algorithm. 
   3. We always scale the final pairwise distance matrix, before the clustering step. Branch lengths in original scale
-     can be recovered from subsets of gene trees (*not implemented yet*). 
+     can be recovered from subsets of gene trees (&#x126D4; *unfinished*). 
   4. It is not uncommon to have a lot of missing information, for instance when two species are never seen together in
-     the same gene. In this case we estimate their pairwise distance from species in common (*not implemented yet*).
+     the same gene. In this case we estimate their pairwise distance from species in common ( &#x126D4; *unfinished*).
 
 As usual, some methods/combinations will make more sense than others.
+
+### Bipartition-based
+These are the classic supertree approaches, also known as "matrix representation with parsimony" (MRP) since the
+maximum parsimony tree is inferred from the bipartition patterns.
+However we extended it to work with mul-trees, by looking at the species represented at both ends of each bipartition
+(&#x126D4; *unfinished*, right now it works correctly with ortholog sets).
+
+The set of gene trees will generate a binary matrix where each row (sample) is a species and each column (dimension) is a 
+bipartition.
+For any given species tree the parsimony score can be calculated from this matrix. where missing data is coded
+accordingly.
+This is a preferred algorithm for sparse data sets (i.e. gene trees don't have information about all species). 
+
 
 ## Installation
 ### From source
