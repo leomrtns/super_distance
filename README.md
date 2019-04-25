@@ -75,7 +75,10 @@ Then the gene leaves would be mapped as follow:
 | Pseudomonas_brassicacearum     | Pseudomonas_brassicacearum    |   
 | Pseudomonas_brassica           | <<UNKNOWN>>                   | 
 ```
-It is valid to have several leaves with the same name, e.g. the species name, although most other software won't allow it.
+In the newick file it is valid to have several leaves with the same name, e.g. the species name, although most other software 
+won't allow it.
+Nexus files need unique taxon names, since the nexus format may need to map a sequence to a tree leaf.
+(In our case, however, we may relax this constraint in the future.)
 `Super_sptree` does not respect, however, spaces within a gene leaf or species names, despite
 agreeing with the [formal newick specification](http://evolution.genetics.washington.edu/phylip/newick_doc.html).
 Remember that the list of species names will define the leaves of the output trees.
