@@ -30,7 +30,7 @@ newick_space
 find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, double tolerance, bool check_spnames, bool remove_reorder_when_check_spnames)
 {
   int i, j, n_pairs, *sp_idx_in_gene = NULL;
-  double **dist;
+  double **dist, *this_scaling, *scaling;
   char_vector species_names;
   spdist_matrix *dm_glob, dm_local; 
   newick_space species_nwk = new_newick_space ();
@@ -47,6 +47,9 @@ find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, doub
   for (j=0; j < 6; j++) zero_all_spdist_matrix (dm_glob[j]); // zero min[] since we'll calc the average in the end  
   dist = (double**) biomcmc_malloc (6 * sizeof (double*)); 
   for (j=0; j < 6; j++) dist[j] = NULL;
+  this_scaling = (double*) biomcmc_malloc (6 * sizeof (double)); 
+  scaling = (double*) biomcmc_malloc (6 * sizeof (double)); 
+  for (j=0; j < 6; j++) scaling[j] = this_scaling[j] = 0.; 
   dm_local  = new_spdist_matrix (species_names->nstrings);
 
   /* 2. update species distance matrices */
@@ -57,15 +60,19 @@ find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, doub
     index_species_gene_char_vectors (species_names, g_nwk->t[i]->taxlabel, sp_idx_in_gene, NULL);
 
     for (j=0; j < 6; j++) dist[j] = (double*) biomcmc_realloc ((double*) dist[j], n_pairs * sizeof (double));
-    patristic_distances_from_topology_to_vectors (g_nwk->t[i], dist, 6, tolerance); 
+    patristic_distances_from_topology_to_vectors (g_nwk->t[i], dist, this_scaling, 6, tolerance); 
 
     for (j=0; j < 6; j++) {
       fill_spdistmatrix_from_gene_dist_vector (dm_local, dist[j], g_nwk->t[i]->nleaves, sp_idx_in_gene);
       update_spdistmatrix_from_spdistmatrix (dm_glob[j], dm_local);
+      scaling[j] += this_scaling[j];
     }
     if (sp_idx_in_gene) free (sp_idx_in_gene);
   }
-  for (j=0; j < 6; j++) finalise_spdist_matrix (dm_glob[j]);  
+  for (j=0; j < 6; j++) {
+    scaling[j] /= (double)(g_nwk->ntrees);
+    finalise_spdist_matrix_with_rescaling (dm_glob[j], scaling[j]);
+  }
   //for (i=0;i<(dm_glob_w->size * (dm_glob_w->size-1))/2; i++) 
   //  printf ("AFT %.6g %.6g    %.6g %.6g\n", dm_glob_w->mean[i], dm_glob_w->min[i], dm_glob_u->mean[i], dm_glob_u->min[i]);
 
@@ -81,6 +88,8 @@ find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, doub
     free (dist);
   }
   for (j = 5; j >=0; j--) del_spdist_matrix (dm_glob[j]);
+  if (this_scaling) free (this_scaling);
+  if (scaling) free (scaling);
   if (dm_glob) free (dm_glob);
   del_spdist_matrix (dm_local);
   del_char_vector (species_names);
