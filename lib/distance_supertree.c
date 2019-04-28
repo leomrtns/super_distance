@@ -1,6 +1,7 @@
 #include "distance_supertree.h" 
 
 void find_maxtree_and_add_to_newick_space (spdist_matrix dist, char_vector spnames, newick_space nwk, int tree_method, bool use_within_gf_means);
+void add_tree_fitted_distances (spdist_matrix dist, topology tree, newick_space nwk);
 
 char_vector
 get_species_names_from_newick_space (newick_space g_nwk, char_vector spnames, bool remove_reorder)
@@ -83,6 +84,9 @@ find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, doub
     find_maxtree_and_add_to_newick_space (dm_glob[j], species_names, species_nwk, i, false); // false/true -> means/mins within locus
     find_maxtree_and_add_to_newick_space (dm_glob[j], species_names, species_nwk, i, true);
   }
+  // TESTING::DEBUG::
+  for (j=0; j < 6; j++) add_tree_fitted_distances (dm_glob[j], species_nwk->t[0], species_nwk);
+
   if (dist) {
     for (j = 5; j >=0; j--) if (dist[j]) free (dist[j]);
     free (dist);
@@ -111,5 +115,14 @@ find_maxtree_and_add_to_newick_space (spdist_matrix dist, char_vector spnames, n
   update_newick_space_from_topology (nwk, maxtree);
   del_distance_matrix (square);
   return;
+}
+
+void
+add_tree_fitted_distances (spdist_matrix dist, topology tree, newick_space nwk)
+{
+  topology this = new_topology (tree->nleaves);
+  copy_topology_from_topology (this, tree);
+  estimate_topology_branch_lengths_from_distances (this, dist->mean);
+  update_newick_space_from_topology (nwk, this);
 }
 
