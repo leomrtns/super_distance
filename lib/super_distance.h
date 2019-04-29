@@ -11,15 +11,12 @@
  * details (file "COPYING" or http://www.gnu.org/copyleft/gpl.html).
  */
 
-/*! \file super_sptree.h 
- *  \brief biomcmc library interface to external programs, specific to super_sptree repo.
- *
- *  The idea is for super_sptree is to be general for several sofware, including treesignal but also parallel projects by
- *  leomrtns. This library started as a branching from the biomcmc library (from the guenomu software)
+/*! \file super_distance.h 
+ *  \brief biomcmc library interface to external programs, specific to super_distance repo.
  */
 
-#ifndef _super_sptree_h_
-#define _super_sptree_h_
+#ifndef _super_distance_h_
+#define _super_distance_h_
 
 #include "parsimony_supertree.h"
 

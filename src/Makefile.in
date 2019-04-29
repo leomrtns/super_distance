@@ -88,7 +88,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = control$(EXEEXT) super_distance$(EXEEXT)
+bin_PROGRAMS = super_distance$(EXEEXT)
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -104,21 +104,16 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_control_OBJECTS = control_file.$(OBJEXT)
-control_OBJECTS = $(am_control_OBJECTS)
-control_LDADD = $(LDADD)
+am_super_distance_OBJECTS = src_super_distance.$(OBJEXT)
+super_distance_OBJECTS = $(am_super_distance_OBJECTS)
+super_distance_LDADD = $(LDADD)
 am__DEPENDENCIES_1 =
-control_DEPENDENCIES = ../lib/libsuper_sptree.la \
+super_distance_DEPENDENCIES = ../lib/libsuper_sptree.la \
 	../biomcmc-lib/lib/libbiomcmc.la $(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-am_super_distance_OBJECTS = super_distance.$(OBJEXT)
-super_distance_OBJECTS = $(am_super_distance_OBJECTS)
-super_distance_LDADD = $(LDADD)
-super_distance_DEPENDENCIES = ../lib/libsuper_sptree.la \
-	../biomcmc-lib/lib/libbiomcmc.la $(am__DEPENDENCIES_1)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -153,8 +148,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(control_SOURCES) $(super_distance_SOURCES)
-DIST_SOURCES = $(control_SOURCES) $(super_distance_SOURCES)
+SOURCES = $(super_distance_SOURCES)
+DIST_SOURCES = $(super_distance_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -311,8 +306,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = $(GTKDEPS_CFLAGS) -I$(srcdir)/../lib -I$(srcdir)/../biomcmc-lib/lib  @OPENMP_CPPFLAGS@
 LDADD = $(GTKDEPS_LIBS) ../lib/libsuper_sptree.la ../biomcmc-lib/lib/libbiomcmc.la  $(AM_LDFLAGS)
-super_distance_SOURCES = super_distance.c super_distance.h
-control_SOURCES = control_file.c control_file.h
+super_distance_SOURCES = src_super_distance.c src_super_distance.h
 all: all-am
 
 .SUFFIXES:
@@ -396,10 +390,6 @@ clean-binPROGRAMS:
 	echo " rm -f" $$list; \
 	rm -f $$list
 
-control$(EXEEXT): $(control_OBJECTS) $(control_DEPENDENCIES) $(EXTRA_control_DEPENDENCIES) 
-	@rm -f control$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(control_OBJECTS) $(control_LDADD) $(LIBS)
-
 super_distance$(EXEEXT): $(super_distance_OBJECTS) $(super_distance_DEPENDENCIES) $(EXTRA_super_distance_DEPENDENCIES) 
 	@rm -f super_distance$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(super_distance_OBJECTS) $(super_distance_LDADD) $(LIBS)
@@ -410,8 +400,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/control_file.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/super_distance.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/src_super_distance.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

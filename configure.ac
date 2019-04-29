@@ -1,5 +1,5 @@
 dnl Autoconf init, autoheader output location, config and prefix directories
-AC_INIT([super_sptree], [0.1], [leomrtns@gmail.com])
+AC_INIT([super_distance], [0.1], [leomrtns@gmail.com])
 AC_CONFIG_AUX_DIR([.])
 
 dnl AC_CONFIG_SRCDIR([src/main_distance.c])
@@ -38,7 +38,7 @@ PKG_CHECK_MODULES([CHECK], [check >= 0.9.10])
 
 dnl library checks (math etc.) are done by biomcmc-lib
 
-AC_MSG_RESULT([                ===    configuration options specific to super_sptree])
+AC_MSG_RESULT([                ===    configuration options specific to super_distance])
 
 AC_MSG_CHECKING([whether to build (slower) debug code])
 AC_ARG_ENABLE([debug],
@@ -92,7 +92,7 @@ AC_OUTPUT
 
 echo \
 "---- 
-Configuration parameters for super_sptree:
+Configuration parameters for super_distance:
 
  Source code location:   ${srcdir}
  Compiler     (library): ${CC}

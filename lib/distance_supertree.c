@@ -74,8 +74,6 @@ find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, doub
     scaling[j] /= (double)(g_nwk->ntrees);
     finalise_spdist_matrix_with_rescaling (dm_glob[j], scaling[j]);
   }
-  //for (i=0;i<(dm_glob_w->size * (dm_glob_w->size-1))/2; i++) 
-  //  printf ("AFT %.6g %.6g    %.6g %.6g\n", dm_glob_w->mean[i], dm_glob_w->min[i], dm_glob_u->mean[i], dm_glob_u->min[i]);
 
   if (dm_glob[0]->n_missing) fprintf (stderr, "OBS: %d species pair combinations never appear on same gene family\n", dm_glob[0]->n_missing);
   // TODO 3: skip matrices if too similar (e.g. orthologous groups lead to mean==min within) 

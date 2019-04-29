@@ -10,23 +10,20 @@
  * details (file "COPYING" or http://www.gnu.org/copyleft/gpl.html).
  */
 
-/*! \file control_file.h
- *  \brief reading control_file with parameters for MCMC  
+/*! \file src_super_distance.h
+ *  \brief struct with argtable command line arguments 
  */
 
-#ifndef _super_sptree_src_control_file_h_
-#define _super_sptree_src_control_file_h_
+#ifndef _super_distance_src_control_file_h_
+#define _super_distance_src_control_file_h_
 
-#include <super_sptree.h> 
-
-#ifdef BIOMCMC_MPI
-#include <mpi.h>
-#endif
+#include <super_distance.h>   // these are the ../lib library headers 
 
 typedef struct
 {
   struct arg_lit  *help;
   struct arg_str  *mode;
+  struct arg_dbl  *tol;
   struct arg_file *spname;
   struct arg_file *genfil;
   struct arg_file *outfil;

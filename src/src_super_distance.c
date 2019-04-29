@@ -1,4 +1,4 @@
-#include "super_distance.h" 
+#include "src_super_distance.h" 
 
 void del_arg_parameters (arg_parameters params);
 void print_usage (arg_parameters params, char *progname);
@@ -8,17 +8,19 @@ get_parameters_from_argv (int argc, char **argv)
 {
   arg_parameters params = {
     .help = arg_litn("h","help",0, 1, "print a longer help and exit"),
-    .mode = arg_strn("m", "mode", "DNP", 0, 1, "distance (D), bipartition NJ (N), parsimony (P)"),
+    .mode = arg_strn("m", "mode", "DNP", 0, 1, "distance (D), bipartition NJ (N), parsimony (P) <only D currently functional>"),
+    .tol  = arg_dbl0("e", "epsilon", NULL, "tolerance (small value below which a branch length is considered zero for nodal distances)"),
     .spname = arg_filen("s","species", "<species names>", 1, 1, "file with species names, one name per line (nexus-style bracketed comments are allowed)"),
     .outfil = arg_file0("o","output", "<newick>", "output file with species supertrees, in newick format (default '-')"),
     .genfil = arg_filen(NULL, NULL, NULL, 1, argc+2, "list of gene tree files, in newick format"),
     .end  = arg_end(20)
   };
-  void* argtable[] = {params.help, params.mode, params.spname, params.outfil, params.genfil, params.end};
+  void* argtable[] = {params.help, params.mode, params.tol, params.spname, params.outfil, params.genfil, params.end};
   params.argtable = argtable; 
   /* default values: */
   params.outfil->filename[0] = "-";
-  params.mode->sval[0] = "DNP";
+  params.mode->sval[0] = "D";
+  params.tol->dval[0] = 1e-7;
   /* actual parsing: */
   if (arg_nullcheck(params.argtable)) biomcmc_error ("Problem allocating memory for the argtable (command line arguments) structure");
   if (arg_parse (argc, argv, params.argtable)) print_usage (params, argv[0]);
@@ -31,6 +33,7 @@ del_arg_parameters (arg_parameters params)
 {
   if (params.help) free (params.help);
   if (params.mode) free (params.mode);
+  if (params.tol)  free (params.tol);
   if (params.spname) free (params.spname);
   if (params.outfil) free (params.outfil);
   if (params.genfil) free (params.genfil);
@@ -49,7 +52,17 @@ print_usage (arg_parameters params, char *progname)
   arg_print_syntaxv (stdout, params.argtable, "\n\n");
   arg_print_glossary(stdout, params.argtable,"  %-32s %s\n");
   if (params.help->count) {
-    printf ("Longer help explanation to come\n");
+    printf ("Currently only the distance-baseed approaches are implemented:\n");
+    printf ("Based on several rescaled patristic distances, the program takes the average matrix between genes and estimates \n");
+    printf (" the species tree using bioNJ, UPGMA and single-linkage after scaling back to the original values (more below). The program \n");
+    printf (" also can use an 'external' distance matrix and project branch lengths on it; we are now playing with these options \n");
+    printf (" and soon the user will have more control over which to output\n\n");
+    printf ("The branch length rescaling per gene can be the minimum, the average, the total sum, etc. and at the end these values\n");
+    printf (" averaged over trees are scaled back in the final distance matrix, such that the supertree (species tree) lengths are interpretable.\n");
+    printf (" One exception is the nodal distance, which is based on the number of nodes between two leaves (e.g. NJst). In this case it may make\n");
+    printf (" more sense to use another distance matrix to infer the branch lengths. We avoid using individual gene trees since they may have \n");
+    printf (" missing information (missing species or species pairs). For missing comparisons (when two species are never seen in the same gene tree)\n");
+    prinft (" we use the ultrametric condition (comparison to a common species) to estimate its value.\n");
   }
   del_arg_parameters (params);
   exit (EXIT_FAILURE);
@@ -81,7 +94,7 @@ main (int argc, char **argv)
 
   /* mode: patristic-based nj/upgma tree: */
   if (strstr(params.mode->sval[0],"D")) {
-    sptrees = find_matrix_distance_species_tree (gene_nwk, species_names, 1e-7, false, false);
+    sptrees = find_matrix_distance_species_tree (gene_nwk, species_names, params.tol->dval[0], false, false);
     for (i=0; i < sptrees->ntrees; i++) { 
       s = topology_to_string_by_name (sptrees->t[i], sptrees->t[i]->blength);
       fprintf (stream, "[D%02d] %s\n", i, s); fflush(stream); free (s);
