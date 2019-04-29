@@ -26,6 +26,7 @@ requirements:
     - libcxx 4.0.*  # [osx]
     - openmp 4.0.*  # [osx]
   host:
+    - check
     - zlib
     - libcxx 4.0.*  # [osx]
     - openmp 4.0.*  # [osx]
