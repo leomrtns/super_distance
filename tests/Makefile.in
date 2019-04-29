@@ -107,7 +107,7 @@ am_check_unit_OBJECTS = check_unit.$(OBJEXT)
 check_unit_OBJECTS = $(am_check_unit_OBJECTS)
 check_unit_LDADD = $(LDADD)
 am__DEPENDENCIES_1 =
-check_unit_DEPENDENCIES = ../lib/libsuper_sptree.la \
+check_unit_DEPENDENCIES = ../lib/libsuper_distance.la \
 	../biomcmc-lib/lib/libbiomcmc.la $(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -509,7 +509,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = $(GTKDEPS_CFLAGS) -I$(srcdir)/../lib -I$(srcdir)/../biomcmc-lib/lib  @OPENMP_CPPFLAGS@
-LDADD = $(GTKDEPS_LIBS) ../lib/libsuper_sptree.la ../biomcmc-lib/lib/libbiomcmc.la  $(AM_LDFLAGS)
+LDADD = $(GTKDEPS_LIBS) ../lib/libsuper_distance.la ../biomcmc-lib/lib/libbiomcmc.la  $(AM_LDFLAGS)
 LIST_OF_TEST_PROGS = check_unit
 check_unit_SOURCES = check_unit.c
 all: all-am
