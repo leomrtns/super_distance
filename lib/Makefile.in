@@ -132,11 +132,11 @@ am__uninstall_files_from_dir = { \
   }
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(otherincludedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-libsuper_sptree_la_LIBADD =
+libsuper_distance_la_LIBADD =
 am__objects_1 =
 am__objects_2 = distance_supertree.lo parsimony_supertree.lo
-am_libsuper_sptree_la_OBJECTS = $(am__objects_1) $(am__objects_2)
-libsuper_sptree_la_OBJECTS = $(am_libsuper_sptree_la_OBJECTS)
+am_libsuper_distance_la_OBJECTS = $(am__objects_1) $(am__objects_2)
+libsuper_distance_la_OBJECTS = $(am_libsuper_distance_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -175,8 +175,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libsuper_sptree_la_SOURCES)
-DIST_SOURCES = $(libsuper_sptree_la_SOURCES)
+SOURCES = $(libsuper_distance_la_SOURCES)
+DIST_SOURCES = $(libsuper_distance_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -336,12 +336,12 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = $(GTKDEPS_CFLAGS)  @OPENMP_CPPFLAGS@ -I$(srcdir)/../biomcmc-lib/lib
 LDADD = $(GTKDEPS_LIBS) $(AM_LDFLAGS) ../biomcmc-lib/lib/libbiomcmc.la
-common_headers = super_sptree.h distance_supertree.h parsimony_supertree.h
+common_headers = super_distance.h distance_supertree.h parsimony_supertree.h
 common_src = distance_supertree.c parsimony_supertree.c
-lib_LTLIBRARIES = libsuper_sptree.la   ## change to noinst_LT... if should be linked statically (not installed globally)
-otherincludedir = "$(includedir)/super_sptree"
+lib_LTLIBRARIES = libsuper_distance.la   ## change to noinst_LT... if should be linked statically (not installed globally)
+otherincludedir = "$(includedir)/super_distance"
 otherinclude_HEADERS = config.h $(common_headers)
-libsuper_sptree_la_SOURCES = $(common_headers) $(common_src) 
+libsuper_distance_la_SOURCES = $(common_headers) $(common_src) 
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-am
 
@@ -427,8 +427,8 @@ clean-libLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 
-libsuper_sptree.la: $(libsuper_sptree_la_OBJECTS) $(libsuper_sptree_la_DEPENDENCIES) $(EXTRA_libsuper_sptree_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(LINK) -rpath $(libdir) $(libsuper_sptree_la_OBJECTS) $(libsuper_sptree_la_LIBADD) $(LIBS)
+libsuper_distance.la: $(libsuper_distance_la_OBJECTS) $(libsuper_distance_la_DEPENDENCIES) $(EXTRA_libsuper_distance_la_DEPENDENCIES) 
+	$(AM_V_CCLD)$(LINK) -rpath $(libdir) $(libsuper_distance_la_OBJECTS) $(libsuper_distance_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

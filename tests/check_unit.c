@@ -1,4 +1,4 @@
-#include <super_sptree.h> 
+#include <super_distance.h> 
 
 #define TEST_SUCCESS 0
 #define TEST_FAILURE 1
@@ -8,5 +8,6 @@
 int
 main ()
 {
+  // if it compiles I am happy 
   return TEST_SUCCESS; 
 }

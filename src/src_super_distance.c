@@ -62,7 +62,7 @@ print_usage (arg_parameters params, char *progname)
     printf (" One exception is the nodal distance, which is based on the number of nodes between two leaves (e.g. NJst). In this case it may make\n");
     printf (" more sense to use another distance matrix to infer the branch lengths. We avoid using individual gene trees since they may have \n");
     printf (" missing information (missing species or species pairs). For missing comparisons (when two species are never seen in the same gene tree)\n");
-    prinft (" we use the ultrametric condition (comparison to a common species) to estimate its value.\n");
+    printf (" we use the ultrametric condition (comparison to a common species) to estimate its value.\n");
   }
   del_arg_parameters (params);
   exit (EXIT_FAILURE);
