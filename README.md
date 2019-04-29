@@ -1,4 +1,7 @@
 # super\_distance (distance-based species supertrees)
+[![Build Status](https://travis-ci.org/quadram-institute-bioscience/super_distance.svg?branch=master)](https://travis-ci.org/quadram-institute-bioscience/super_distance)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-brightgreen.svg)](https://github.com/quadram-institute-bioscience/super_distance/blob/master/LICENSE)
+
 
 This software implements the most common supertree methods, with emphasis on whole gene families (i.e. gene trees that
 may contain paralogs) for species tree inference. The idea is to use a common framework for different algorithms, although not 
@@ -9,8 +12,8 @@ trees* or *gene families*) it produces a small set of output trees (*species tre
 information in the input trees. 
 
 ### note for beta testers:
-This software is still not ready for public consumption; the main limitations (specially when the program doesn't
-behave like describe in this readme) are marked with the symbol &#x26D4;.
+This software is still not complete, probably not ready for public consumption; the main limitations (specially when the program doesn't
+behave like described in this readme) are marked with the symbol &#x26D4;.
 Currently it assumes newick files, and uses only the distance-based estimation. 
 
 ## Installation
