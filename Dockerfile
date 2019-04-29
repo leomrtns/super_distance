@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     automake  && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-RUN git clone --recursive https://github.com/leomrtns/super_sptree.git && \
+RUN git clone --recursive https://github.com/leomrtns/super_distance.git && \
     mkdir build && \
     cd build && \
     ../super_sptree/configure && \
