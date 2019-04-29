@@ -5,7 +5,7 @@ void find_upgma_mrp_tree_and_add_to_newick_space (double *dists, char_vector spn
 newick_space
 find_upgma_mrp_species_tree (newick_space g_nwk, char_vector spnames, bool check_spnames, bool remove_reorder_when_check_spnames)
 {
-  int i,j, *sp_idx_in_gene = NULL;
+  int i,j, n_sp, *sp_idx_in_gene = NULL;
   double *d[3] = {NULL, NULL, NULL};
   char_vector species_names;
   binary_parsimony pars;
