@@ -23,7 +23,8 @@ find_upgma_mrp_species_tree (newick_space g_nwk, char_vector spnames, bool check
   for (i=0; i < g_nwk->ntrees; i++) {
     sp_idx_in_gene = (int *) biomcmc_realloc ((int*) sp_idx_in_gene, g_nwk->t[i]->nleaves * sizeof (int));
     index_species_gene_char_vectors (species_names, g_nwk->t[i]->taxlabel, sp_idx_in_gene, NULL);
-    update_binary_parsimony_from_topology (pars, g_nwk->t[i], sp_idx_in_gene);
+    n_sp = count_species_in_index_species_gene (sp_idx_in_gene, species_names->nstrings, g_nwk->t[i]->nleaves);
+    update_binary_parsimony_from_topology (pars, g_nwk->t[i], sp_idx_in_gene, n_sp);
   }
   /* 3. create square distance_matrix */
 
