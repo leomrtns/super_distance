@@ -65,7 +65,7 @@ print_usage (arg_parameters params, char *progname)
     printf (" we use the ultrametric condition (comparison to a common species) to estimate its value.\n");
   }
   del_arg_parameters (params);
-  exit (EXIT_FAILURE);
+  exit (EXIT_SUCCESS);
 }
 
 int
