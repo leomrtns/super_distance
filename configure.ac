@@ -14,6 +14,7 @@ CXXFLAGS=${CXXFLAGS-""}
 dnl automake initialization (completely unrelated to compiler arguments)
 AM_INIT_AUTOMAKE([-Wall -Werror])
 AC_USE_SYSTEM_EXTENSIONS
+AM_MAINTAINER_MODE
 dnl must be called after AC_USE_SYSTEM_EXTENSIONS (new restriction in autoconf2.68) 
 m4_ifdef([AM_PROG_AR], [AM_PROG_AR])
 
