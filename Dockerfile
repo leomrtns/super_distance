@@ -7,10 +7,11 @@ RUN apt-get update && apt-get install -y \
     giflib-dbg \
     build-essential \
     automake  && \
+    check && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 RUN git clone --recursive https://github.com/leomrtns/super_distance.git && \
     mkdir build && \
     cd build && \
-    ../super_sptree/configure && \
+    ../super_distance/configure && \
     make && make install
