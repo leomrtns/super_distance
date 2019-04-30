@@ -1,6 +1,7 @@
 # super\_distance (distance-based species supertrees)
 [![Build Status](https://travis-ci.org/quadram-institute-bioscience/super_distance.svg?branch=master)](https://travis-ci.org/quadram-institute-bioscience/super_distance)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-brightgreen.svg)](https://github.com/quadram-institute-bioscience/super_distance/blob/master/LICENSE)
+[![Docker Pulls](https://img.shields.io/docker/pulls/leomrtns/super_distance.svg)](https://hub.docker.com/r/leomrtns/super_distance)]
 
 
 This software implements the most common supertree methods, with emphasis on whole gene families (i.e. gene trees that
@@ -44,6 +45,16 @@ You can then run a battery of tests with
 
 If you download the zip instead of git-cloning you will miss the the biomcmc-lib library, which is a submodule. In this
 case please [download it](https://github.com/quadram-institute-bioscience/biomcmc-lib) and unzip it below `super_distance-master/`.
+
+### Docker
+After installing [Docker](https://www.docker.com/), you can install a docker container for `super_distance` with:
+```[bash]
+docker pull leomrtns/super_distance
+```
+And to use it you can run something like  
+```[bash]
+docker run --rm -it -v /path/to/data:/data leomrtns/super_distance super_distance -s /data/species_names.txt /data/gene1.tree /data/gene2.tre
+```
 
 ## Usage 
 
