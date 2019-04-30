@@ -1,12 +1,5 @@
 {% set version="0.1" %}
 
-about:
-  home: https://github.com/quadram-institute-bioscience/super_distance
-  license: 'GPLv3'
-  summary: 'Supertree methods with distances'
-  identifiers:
-    - biotools:super_distance
-
 package:
   name: super_distance 
   version: {{ version }}
@@ -16,7 +9,7 @@ source:
   md5: unused
 
 build:
-  number: 1
+  number: 0
   skip: true # [osx]
 
 requirements:
@@ -25,13 +18,9 @@ requirements:
     - automake
     - make
     - check
-    - libcxx 4.0.*  # [osx]
-    - openmp 4.0.*  # [osx]
   host:
     - check
     - zlib
-    - libcxx 4.0.*  # [osx]
-    - openmp 4.0.*  # [osx]
   run:
     - zlib
 
@@ -39,6 +28,13 @@ test:
   commands:
     - super_distance -h 
 
+about:
+  home: https://github.com/quadram-institute-bioscience/super_distance
+  license: 'GPLv3'
+  summary: 'Supertree methods with distances'
+
 extra:
+  identifiers:
+    - biotools:super_distance
   skip-lints:
     - uses_git_url

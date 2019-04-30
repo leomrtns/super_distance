@@ -1,7 +1,7 @@
 # super\_distance (distance-based species supertrees)
 [![Build Status](https://travis-ci.org/quadram-institute-bioscience/super_distance.svg?branch=master)](https://travis-ci.org/quadram-institute-bioscience/super_distance)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-brightgreen.svg)](https://github.com/quadram-institute-bioscience/super_distance/blob/master/LICENSE)
-[![Docker Pulls](https://img.shields.io/docker/pulls/leomrtns/super_distance.svg)](https://hub.docker.com/r/leomrtns/super_distance)]
+[![Docker Pulls](https://img.shields.io/docker/pulls/leomrtns/super_distance.svg)](https://hub.docker.com/r/leomrtns/super_distance)
 
 
 This software implements the most common supertree methods, with emphasis on whole gene families (i.e. gene trees that
@@ -18,6 +18,14 @@ behave like described in this readme) are marked with the symbol &#x26D4;.
 Currently it assumes newick files, and uses only the distance-based estimation. 
 
 ## Installation
+### Conda
+[![Anaconda-Server Badge](https://anaconda.org/bioconda/super_distance/badges/platforms.svg)](https://anaconda.org/bioconda/super_distance)
+[![Anaconda-Server Badge](https://anaconda.org/bioconda/super_distance/badges/latest_release_date.svg)](https://anaconda.org/bioconda/super_distance)
+After you install [miniconda](https://conda.io/en/latest/miniconda.html), simply run
+```[bash]
+conda install -c bioconda super_distance
+```
+
 ### From source
 The instalation uses the autotools build system for compilation, and relies on the
 [biomcmc-lib](https://github.com/quadram-institute-bioscience/biomcmc-lib) library, which can be downloaded
@@ -26,10 +34,9 @@ recursivelly:
 /home/simpson/$ git clone --recursive git@github.com:quadram-institute-bioscience/super_distance.git
 /home/simpson/$ mkdir build
 /home/simpson/$ cd build
-/home/simpson/$ ../super_distance-master/configure --prefix=/usr/local
+/home/simpson/$ ../super_distance/configure --prefix=/usr/local
 /home/simpson/$ make; sudo make install
 ```
-
 As seen above, it is usually good idea to compile the code on a dedicated clean directory (`build`, in the example). 
 The example above will install the `libsuper_distance` globally, in `/usr/local/lib`. 
 If you don't have administrative (*sudo*) priviledges you can chose a local directory, by replacing the two last lines
@@ -42,7 +49,6 @@ You can then run a battery of tests with
 ```[bash]
 /home/simpson/$ make check
 ```
-
 If you download the zip instead of git-cloning you will miss the the biomcmc-lib library, which is a submodule. In this
 case please [download it](https://github.com/quadram-institute-bioscience/biomcmc-lib) and unzip it below `super_distance-master/`.
 
@@ -53,8 +59,10 @@ docker pull leomrtns/super_distance
 ```
 And to use it you can run something like  
 ```[bash]
-docker run --rm -it -v /path/to/data:/data leomrtns/super_distance super_distance -s /data/species_names.txt /data/gene1.tree /data/gene2.tre
+docker run --rm -it -v /path/to/data:/data leomrtns/super_distance sh -c 'super_distance -s /data/species_names.txt /data/gene*.tre'
 ```
+Notice that the command we invoke is actually `sh`, to be able to use shell expansion; you are free to call
+`super_distance` directly but in this case you must write all file names (thanks to [Andrea](https://github.com/telatin) for the trick!).
 
 ## Usage 
 
