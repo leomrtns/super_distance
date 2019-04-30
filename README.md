@@ -63,8 +63,29 @@ docker run --rm -it -v /path/to/data:/data leomrtns/super_distance sh -c 'super_
 ```
 Notice that the command we invoke is actually `sh`, to be able to use shell expansion; you are free to call
 `super_distance` directly but in this case you must write all file names (thanks to [Andrea](https://github.com/telatin) for the trick!).
+You may also prefer to first go to the working directory (`/path/to/data` in our example) and then run everything from
+there &mdash; remember that docker can only access files mounted with `-v`:
+```[bash]
+docker run --rm -it -v /path/to/data:/data leomrtns/super_distance sh -c 'cd /data && super_distance -s species_names.txt gene*.tre'
+```
 
 ## Usage 
+The program needs a file with the species names (see below) and a list of the gene trees, in newick format. You can see
+the options by running
+```[bash]
+/home/simpson/$ super_distance -h      ## OR
+/home/simpson/$ super_distance --help  ## same as above
+```
+As seen above, all options have a short (one character) and a long version. Currently the available options are:
+- **--epsilon (-e)** This is the minimum branch length on internodal distances; values smaller than this are considered to
+  be multifurcations
+- **--species (-s)** file name with the list of species names
+- **--output (-o)** output filename with resulting supertrees
+- **--mode (-m)** which algorithms should be used, with a one-letter code for each. This is ever-changing at the moment,
+  only the distance-based algortihms are certain. 
+- all remaining arguments are assumed to be the names of gene files. 
+The list above may be incomplete as the software is being developed. Please run `super_distance -n` for an up-to-date
+description. 
 
 ### Mapping from genes to species
 The input trees don't need to have information on all species, which is the classic supertree setting. 
