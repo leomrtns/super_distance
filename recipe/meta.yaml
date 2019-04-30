@@ -22,6 +22,8 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}
+    - automake
+    - make
     - check
     - libcxx 4.0.*  # [osx]
     - openmp 4.0.*  # [osx]

@@ -13,5 +13,5 @@ RUN apt-get update && apt-get install -y \
 RUN git clone --recursive https://github.com/leomrtns/super_distance.git && \
     mkdir build && \
     cd build && \
-    ../super_distance/configure && \
+    ../super_distance/configure --prefix=/ && \
     make && make install
