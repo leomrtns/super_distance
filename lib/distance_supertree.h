@@ -22,6 +22,6 @@
 #include <biomcmc.h> 
 
 char_vector get_species_names_from_newick_space (newick_space g_nwk, char_vector spnames, bool check_spnames);
-newick_space find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, double tolerance, bool check_spnames, bool remove_reorder_when_check_spnames);
+newick_space find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, double tolerance, bool check_spnames, bool remove_reorder_when_check_spnames, bool fast);
 
 #endif
