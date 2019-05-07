@@ -14,5 +14,9 @@ install:
 script:
   - "mkdir build; cd build; ../configure && make && make check"
 
+branches:
+  only:
+  - master
+
 # the Default script is "./configure && make && make test"
 
