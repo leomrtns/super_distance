@@ -80,11 +80,13 @@ main (int argc, char **argv)
   biomcmc_random_number_init (0);
   arg_parameters params = get_parameters_from_argv (argc, argv);
 
-  /* read species names and reduce to valid ones: */ 
-  original_spnames = new_char_vector_from_file ((char*) params.spname->filename[0]);
   for (i=0; i < params.genfil->count; i++) update_newick_space_from_file (gene_nwk, (char*) params.genfil->filename[i]);
-  species_names = get_species_names_from_newick_space (gene_nwk, original_spnames, true); // true= reorder species names
-  del_char_vector (original_spnames); // free() or decrease ref_counter is same as species_names
+  /* read species names and reduce to valid ones: */ 
+  if (params.spname->count) {
+    original_spnames = new_char_vector_from_file ((char*) params.spname->filename[0]);
+    species_names = get_species_names_from_newick_space (gene_nwk, original_spnames, true); // true= reorder species names
+    del_char_vector (original_spnames); // free() or decrease ref_counter is same as species_names
+  }
 
   /* open output file: */
   if (strstr (params.outfil->filename[0], "-")) stream = stdout;
