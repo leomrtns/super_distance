@@ -18,6 +18,6 @@
 #ifndef _super_distance_h_
 #define _super_distance_h_
 
-#include "parsimony_supertree.h"
+#include "distance_supertree.h"
 
 #endif

@@ -8,18 +8,17 @@ get_parameters_from_argv (int argc, char **argv)
 {
   arg_parameters params = {
     .help = arg_litn("h","help",0, 1, "print a longer help and exit"),
-    .mode = arg_strn("m", "mode", "DFN", 0, 1, "distance (D), few distances (F), bipartition NJ (N)"),
+    .fast = arg_litn("F", "fast", 0, 1, "for too many leaves, estimates only two species trees"),
     .tol  = arg_dbl0("e", "epsilon", NULL, "tolerance (small value below which a branch length is considered zero for nodal distances)"),
     .spname = arg_filen("s","species", "<species names>", 1, 1, "file with species names, one name per line (nexus-style bracketed comments are allowed)"),
     .outfil = arg_file0("o","output", "<newick>", "output file with species supertrees, in newick format (default '-')"),
     .genfil = arg_filen(NULL, NULL, NULL, 1, argc+2, "list of gene tree files, in newick format"),
     .end  = arg_end(20)
   };
-  void* argtable[] = {params.help, params.mode, params.tol, params.spname, params.outfil, params.genfil, params.end};
+  void* argtable[] = {params.help, params.fast, params.tol, params.spname, params.outfil, params.genfil, params.end};
   params.argtable = argtable; 
   /* default values: */
   params.outfil->filename[0] = "-";
-  params.mode->sval[0] = "F";
   params.tol->dval[0] = 1e-7;
   /* actual parsing: */
   if (arg_nullcheck(params.argtable)) biomcmc_error ("Problem allocating memory for the argtable (command line arguments) structure");
@@ -32,7 +31,7 @@ void
 del_arg_parameters (arg_parameters params)
 {
   if (params.help) free (params.help);
-  if (params.mode) free (params.mode);
+  if (params.fast) free (params.fast);
   if (params.tol)  free (params.tol);
   if (params.spname) free (params.spname);
   if (params.outfil) free (params.outfil);
@@ -52,10 +51,9 @@ print_usage (arg_parameters params, char *progname)
   arg_print_syntaxv (stdout, params.argtable, "\n\n");
   arg_print_glossary(stdout, params.argtable,"  %-32s %s\n");
   if (params.help->count) {
-    printf ("Currently only the distance-baseed approaches are implemented:\n");
     printf ("Based on several rescaled patristic distances, the program takes the average matrix between genes and estimates \n");
     printf (" the species tree using bioNJ, UPGMA and single-linkage after scaling back to the original values (more below). The program \n");
-    printf (" also can use an 'external' distance matrix and project branch lengths on it; \n\n");
+    printf (" also can use a distance matrix and project branch lengths on it; \n\n");
     printf ("The branch length rescaling per gene can be the minimum, the average, the total sum, etc. and at the end these values\n");
     printf (" averaged over trees are scaled back in the final distance matrix, such that the supertree (species tree) lengths are interpretable.\n");
     printf (" One exception is the nodal distance, which is based on the number of nodes between two leaves (e.g. NJst). In this case it may make\n");
@@ -92,17 +90,8 @@ main (int argc, char **argv)
   if (strstr (params.outfil->filename[0], "-")) stream = stdout;
   else stream = biomcmc_fopen (params.outfil->filename[0], "w");
 
-  /* mode: patristic-based nj/upgma tree: */
-  if (strstr(params.mode->sval[0],"D")) {
-    sptrees = find_matrix_distance_species_tree (gene_nwk, species_names, params.tol->dval[0], false, false, false);
-    for (i=0; i < sptrees->ntrees; i++) { 
-      s = topology_to_string_by_name (sptrees->t[i], sptrees->t[i]->blength);
-      fprintf (stream, "[D%02d] %s\n", i, s); fflush(stream); free (s);
-    }
-    del_newick_space (sptrees);
-  }
   /* mode: fast version of patristic-based upgma tree: */
-  else if (strstr(params.mode->sval[0],"F")) { // only if option "F" unset, since redundant
+  if (params.fast->count) { 
     sptrees = find_matrix_distance_species_tree (gene_nwk, species_names, params.tol->dval[0], false, false, true);
     for (i=0; i < sptrees->ntrees; i++) { 
       s = topology_to_string_by_name (sptrees->t[i], sptrees->t[i]->blength);
@@ -110,12 +99,12 @@ main (int argc, char **argv)
     }
     del_newick_space (sptrees);
   }
-  /* mode: nj/upgma tree based on bipartition (MRP) distances; usually initial MRP tree: */
-  if (strstr(params.mode->sval[0],"N")) {
-    sptrees = find_upgma_mrp_species_tree (gene_nwk, species_names, false, false);
+  /* mode: patristic-based nj/upgma tree: */
+  else { 
+    sptrees = find_matrix_distance_species_tree (gene_nwk, species_names, params.tol->dval[0], false, false, false);
     for (i=0; i < sptrees->ntrees; i++) { 
       s = topology_to_string_by_name (sptrees->t[i], sptrees->t[i]->blength);
-      fprintf (stream, "[N%02d] %s\n", i, s); fflush(stream); free (s);
+      fprintf (stream, "[D%02d] %s\n", i, s); fflush(stream); free (s);
     }
     del_newick_space (sptrees);
   }

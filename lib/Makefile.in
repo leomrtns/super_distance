@@ -134,7 +134,7 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(otherincludedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libsuper_distance_la_LIBADD =
 am__objects_1 =
-am__objects_2 = distance_supertree.lo parsimony_supertree.lo
+am__objects_2 = distance_supertree.lo
 am_libsuper_distance_la_OBJECTS = $(am__objects_1) $(am__objects_2)
 libsuper_distance_la_OBJECTS = $(am_libsuper_distance_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
@@ -337,8 +337,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = $(GTKDEPS_CFLAGS)  @OPENMP_CPPFLAGS@ -I$(srcdir)/../biomcmc-lib/lib
 LDADD = $(GTKDEPS_LIBS) $(AM_LDFLAGS) ../biomcmc-lib/lib/libbiomcmc.la
-common_headers = super_distance.h distance_supertree.h parsimony_supertree.h
-common_src = distance_supertree.c parsimony_supertree.c
+common_headers = super_distance.h distance_supertree.h 
+common_src = distance_supertree.c 
 lib_LTLIBRARIES = libsuper_distance.la   ## change to noinst_LT... if should be linked statically (not installed globally)
 otherincludedir = "$(includedir)/super_distance"
 otherinclude_HEADERS = config.h $(common_headers)
@@ -438,7 +438,6 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/distance_supertree.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/parsimony_supertree.Plo@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
