@@ -22,6 +22,7 @@
 typedef struct
 {
   struct arg_lit  *help;
+  struct arg_lit  *version;
   struct arg_lit  *fast;
   struct arg_dbl  *tol;
   struct arg_file *spname;

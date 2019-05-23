@@ -1,5 +1,5 @@
 dnl Autoconf init, autoheader output location, config and prefix directories
-AC_INIT([super_distance], [0.1], [leomrtns@gmail.com])
+AC_INIT([super_distance], [1.1.0], [leomrtns@gmail.com],[], [https://github.com/quadram-institute-bioscience/super_distance])
 AC_CONFIG_AUX_DIR([.])
 
 dnl AC_CONFIG_SRCDIR([src/main_distance.c])

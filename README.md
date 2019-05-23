@@ -4,18 +4,21 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/leomrtns/super_distance.svg)](https://hub.docker.com/r/leomrtns/super_distance)
 
 
-This software implements the most common supertree methods, with emphasis on whole gene families (i.e. gene trees that
-may contain paralogs) for species tree inference. The idea is to use a common framework for different algorithms, although not 
-all methods are implemented (e.g.  [Bayesian supertrees](https://bitbucket.org/leomrtns/guenomu/) are absent).
+This software implements a class of methods called Matrix Representation with Distances (MRD), with emphasis on whole gene families 
+(i.e. gene trees that may contain paralogs) for species tree inference. Historically MRD was used in supertree
+estimation for orthologous sets, but recently many patristic distance-based [methods](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4391732/), also called
+[summary statistics methods](https://onlinelibrary.wiley.com/doi/full/10.1111/jse.12160) 
+([NJst](https://doi.org/10.1093/sysbio/syr027),
+[STEM](https://doi.org/10.1093/bioinformatics/btp079), 
+[ASTRID](https://doi.org/10.1186/1471-2164-16-S10-S3), 
+[STAR](https://arxiv.org/abs/1204.4413), etc etc), can be applied to paralogous sets. 
 
 The software is fast enough such that it can be added into workflows, and given a large set of input trees (that we call *gene
 trees* or *gene families*) it produces a small set of output trees (*species trees*) that tries to summarise the
-information in the input trees. 
+information in the input trees.  Currently it assumes newick files, and the two suggested ways of using it are:
 
-### note for beta testers:
-This software is still not complete, probably not ready for public consumption; the main limitations (specially when the program doesn't
-behave like described in this readme) are marked with the symbol &#x26D4;.
-Currently it assumes newick files, and uses only the distance-based estimation. 
+1. If you have a list of all species names (see below), where you can then have missing data.
+2. If all trees are on same leaf set, with very little missing data (the classic MRD setting).
 
 ## Installation
 ### Conda
@@ -70,7 +73,7 @@ docker run --rm -it -v /path/to/data:/data leomrtns/super_distance sh -c 'cd /da
 ```
 
 ## Usage 
-The program needs a file with the species names (see below) and a list of the gene trees, in newick format. You can see
+The program works better with a file with species names (more info below) and a list of the gene trees, in newick format. You can see
 the options by running
 ```[bash]
 /home/simpson/$ super_distance -h      ## OR
@@ -79,13 +82,22 @@ the options by running
 As seen above, all options have a short (one character) and a long version. Currently the available options are:
 - **--epsilon (-e)** This is the minimum branch length on internodal distances; values smaller than this are considered to
   be multifurcations
-- **--species (-s)** file name with the list of species names
-- **--output (-o)** output filename with resulting supertrees
-- **--mode (-m)** which algorithms should be used, with a one-letter code for each. This is ever-changing at the moment,
-  only the distance-based algortihms are certain. 
+- **--species (-s)** file name with the list of species names (optional, but stringly recommended)
+- **--output (-o)** output filename with resulting supertrees (default is "-", which prints to screen)
+- **--fast (-F)** Just two species trees are estimated, instead of all of them.  
+- **--version (-v)** prints compiled version and exits
 - all remaining arguments are assumed to be the names of gene files. 
-The list above may be incomplete as the software is being developed. Please run `super_distance -n` for an up-to-date
+The list above may be incomplete as the software is under development. Please run `super_distance -h` for an up-to-date
 description. 
+
+It will output many trees using all possible combinations of branch rescaling, clustering algorithms, and matrix merging
+options. If option `--fast` was given, then only two trees are output, based on the UPGMA estimate of nodal distances
+and of normalised branch lengths (more on methods below). 
+
+The algorithms expect input trees with branch lengths (since it estimates distances between leaves using individual branch
+lengths), but the program works in their absence &mdash; although many output trees will be the same.
+Some output trees will also be the same if there are no paralogs (since they use different strategies for paralog
+distances resolution). 
 
 ### Mapping from genes to species
 The input trees don't need to have information on all species, which is the classic supertree setting. 
@@ -97,7 +109,8 @@ to create a tree on the full set of taxa, from trees on subsets of it).
 super\_distance works as expected on the classic setting, by the way. 
 
 Therefore, besides the input gene trees the program will request a file with a list of species names, which will provide
-a mapping between leaves from the gene trees and leaves from the species tree. 
+a mapping between leaves from the gene trees and leaves from the species tree.
+This file is not needed but program may fail with no good explanation if you're not careful, see below.
 The program tries to find the species name associated to each gene leaf by string matching, which means the gene tree
 leaves must contain the species names. For instance if the list of species names is
 
@@ -125,22 +138,42 @@ Then the gene leaves would be mapped as follow:
 ```
 In the newick file it is valid to have several leaves with the same name, e.g. the species name, although most other software 
 won't allow it.
-Nexus files need unique taxon names, since the nexus format may need to map a sequence to a tree leaf.
-(&#x26D4; currently only newick files are accepted, altough we alread have the equivalent functions for nexus trees).
 `Super_distance` does not respect, however, spaces within a gene leaf or species names, despite these
 agreeing with the [formal newick specification](http://evolution.genetics.washington.edu/phylip/newick_doc.html).
-Remember that the list of species names will define the leaves of the output trees, and thus the program may work even
-in the presence of spaces (since it removes them from all input files).
+Since the list of species names will define the leaves of the output trees, the program may work even
+in the presence of spaces, since it removes them from all input files.
 In the future, and if it bothers enough people, we may implement automatic inference of species names. 
-It is worh mentioning again that the software works equally well in the absence of mul-trees, but the file with species
-names must still be provided. 
 
-## Algorithms
-Several distance-based and one bipartition-based supertree methods are being implemented, but only the distance based
-methods are functional. 
-Multifurcating trees are allowed, since the polytomies are transformed into dicotomies of length zero. 
+### Missing file with species names
+The software works equally well in the absence of mul-trees, in which case the file with species names may not be
+needed. 
+In this situation, however, the software will not do extensive checks of name compliance &mdash; it will simply assume 
+that the largest gene tree has _all_ species represented.
 
-### Distance-based, or MRD supertrees
+Therefore if not providing the list of species, please check that:
+
+1. gene leaf names are comparable across genes: e.g. "ECOLI-a" and "ECOLI-b" are two different 'species' in the absence
+   of a species name list; only the list could say that "ECOLI" is the species name.
+2. most gene trees have info on all species: although the program can handle trees with missing species, you have to make
+   sure that at least one tree has no missing species. And MRD is not particularly good with a lot of missing data.
+
+In both cases the program will fail without a helpful message (it may say something like `Couldn't find species for genes`). 
+
+My suggestion is to use this option (without a list of species names) only if you are sure all trees are perfectly
+comparable, i.e. if they are different runs of same tree inference software on same data, or bootstrap replicates, or a
+sliding window inference... in any case make sure the leaf names are the same between trees.
+
+### Moar data!
+
+If the software estimates trees like the ones below, you may need to include more data in each tree.
+The ladderised pattern with long branches may indicate lack of pairwise comparisons (when a pair of species are never
+found together in the same gene tree). 
+<img src="tree201.png" width="500" align="middle">
+
+
+## Algorithms: distance-based, or MRD supertrees
+Several distance-based are implemented. Multifurcating trees are allowed, since the polytomies are transformed into dicotomies of length zero. 
+
 These methods are sometimes called "matrix representation with distances" (MRD), specially in the classic supertree
 context (where we don't have mul-trees), and are a generalisation of the ASTRID, NJst, STAR, and a few others. 
 What they all have in common is that 
@@ -149,7 +182,7 @@ What they all have in common is that
   2. If there are several leaves from same species (i.e. the gene tree is a mul-tree) then the average or the minimum over all
      possible patristic distances is taken as the species-wise distance between pairs
   3. Once they have one pairwise distance matrix per gene, they merge them into one matrix by taking the average or the
-     minimum across genes. 
+     minimum across genes (we use average only). 
   4. This overall distance matrix is then used by a clustering algorithm to estimate the species tree.
 
 Some methods use rooted while others use unrooted trees; some use branch lengths while
@@ -159,49 +192,21 @@ or the pairwise species matrix.
 To avoid a [Buridan's donkey situation](https://en.wikipedia.org/wiki/Buridan%27s_ass), we've implemented all possible
 combinations, with a few caveats: 
   
-  1. We only use the average, and not the minimum, between loci. Within a locus (gene) we can use both. 
+  1. We only use the average, and not the minimum, between loci. Within a locus (gene) we use both the average and the
+     minimum.
   2. We implemented both UPGMA and single-linkage clustering, besides the bioNJ implemenentation of the
      Neighbour-Joining algorithm. 
   3. When we rescale the gene trees, we scale back the final pairwise distance matrix, before the clustering step. This
-     final scaling is based on the average over all genes, such that all supertrees should have easily interpretable lengths
-     (except maybe for the internodal distances). 
+     final scaling is based on the average over all genes, such that all supertrees should have easily interpretable lengths.
+     The exception are species tree based on the internodal distances, where we use the total average pairwise distance matrix 
+     to find the best branch lengths by least squares. 
   4. It is not uncommon to have a lot of missing information, for instance when two species are never seen together in
      the same gene. In this case we estimate their pairwise distance from species in common using the [ultrametric
-     approach](http://dx.doi.org/10.1093/bioinformatics/bth211).
-As usual, some methods/combinations will make more sense than others. 
+     approach](http://dx.doi.org/10.1093/bioinformatics/bth211). As mentioned above, weird things may happen then.
 
-&#x26D4; Currently we report a list of supertrees without any explanation about the method, but this may change (if
-we allow the user to set the models, although I prefer to infer all since they're fast)
+As usual, some methods/combinations will make more sense than others. Currently the software reports a list of supertrees without any 
+explanation about the method, but this may change in future versions.
 
-### Bipartition-based, or MRP supertrees
-These are the classic supertree approaches, also known as "matrix representation with parsimony" (MRP) since the
-maximum parsimony tree is inferred from the bipartition patterns.
-However we extended it to work with mul-trees, by looking at the species represented at both ends of each bipartition
-(&#x26D4; *unfinished*, right now it works correctly only with ortholog sets, and is not offered to user).
-
-The set of gene trees will generate a binary matrix where each row (sample) is a species and each column (dimension) is a 
-bipartition.
-For any given species tree the parsimony score can be calculated from this matrix. where missing data is coded
-accordingly, and a initial state can be found through a clustering algorithm.
-This is a preferred algorithm for sparse data sets (i.e. gene trees don't have information about all species). 
-Several modifications of the basic algorithm are possible, as the maximum compatibility supertree or the quartet
-supertree (although we don't have plans of implementing the latter). 
-
-### Reconciliation, or median supertrees
-These are supertrees that try to minimise the distance from the set of input trees.
-They can be with respect to a particular tree-to-tree distance, or to a set of distances &mdash; in which case no single
-supertree will be a global optimum.
-Right now they neglect branch lengths, but work seamlessly with mul-trees. 
-The quartet supertree would be implemented here (as the ASTRAL algorithm). 
-(&#x26D4; *unfinished*, currently the user cannot chose this model).
-
-### Consensus trees
-If all the input trees share the same leaf set (i.e. the same species, with no missing data), then we can estimate the
-consensus trees.
-In all supertree methods above we assume one sample tree per gene family, but here we can create weightings per gene
-tree file &mdash; nexus files are particularly suited for large collections since they have a translation table for leaf
-names, and allow for compact distributions of topologies (as in the `.trprobs` files of MrBayes, for instance)
-(&#x26D4; *unfinished*, currently the user cannot chose this mode; I would offer it as another program).
 
 ## License 
 Copyright (C) 2019-today  [Leonardo de Oliveira Martins](https://github.com/leomrtns)

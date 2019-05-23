@@ -27,6 +27,19 @@ get_species_names_from_newick_space (newick_space g_nwk, char_vector spnames, bo
   return vec;
 }
 
+char_vector
+assume_species_names_from_newick_space (newick_space g_nwk)
+{
+  int i, largest_tree = 0;
+  char_vector vec;
+  /* search for tree with largest number of leaves (assumes orthology) */
+  for (i=1; i < g_nwk->ntrees; i++) if (g_nwk->t[i]->taxlabel->nstrings > g_nwk->t[largest_tree]->taxlabel->nstrings) largest_tree = i;
+  vec = new_char_vector(g_nwk->t[largest_tree]->taxlabel->nstrings);
+  for (i = 0; i < g_nwk->t[largest_tree]->taxlabel->nstrings; i++) char_vector_add_string (vec, g_nwk->t[largest_tree]->taxlabel->string[i]);
+  char_vector_reorder_by_size_or_lexicographically (vec, false, NULL); // false/true -> by size/lexico
+  return vec;
+}
+
 newick_space
 find_matrix_distance_species_tree (newick_space g_nwk, char_vector spnames, double tolerance, bool check_spnames, bool remove_reorder_when_check_spnames, bool fast)
 {
