@@ -1,4 +1,4 @@
-# Super\_distance &mdash; distance-based species supertrees 
+# Super\_distance &mdash; distance-based supertrees 
 [![Build Status](https://travis-ci.org/quadram-institute-bioscience/super_distance.svg?branch=master)](https://travis-ci.org/quadram-institute-bioscience/super_distance)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-brightgreen.svg)](https://github.com/quadram-institute-bioscience/super_distance/blob/master/LICENSE)
 [![Docker Pulls](https://img.shields.io/docker/pulls/leomrtns/super_distance.svg)](https://hub.docker.com/r/leomrtns/super_distance)
