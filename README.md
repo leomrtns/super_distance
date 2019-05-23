@@ -1,24 +1,26 @@
-# super\_distance (distance-based species supertrees)
+# Super\_distance &mdash; distance-based species supertrees 
 [![Build Status](https://travis-ci.org/quadram-institute-bioscience/super_distance.svg?branch=master)](https://travis-ci.org/quadram-institute-bioscience/super_distance)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-brightgreen.svg)](https://github.com/quadram-institute-bioscience/super_distance/blob/master/LICENSE)
 [![Docker Pulls](https://img.shields.io/docker/pulls/leomrtns/super_distance.svg)](https://hub.docker.com/r/leomrtns/super_distance)
 
 
-This software implements a class of methods called Matrix Representation with Distances (MRD), with emphasis on whole gene families 
-(i.e. gene trees that may contain paralogs) for species tree inference. Historically MRD was used in supertree
+This software implements a class of methods called **Matrix Representation with Distances** (MRD), with emphasis on whole gene families 
+(i.e. gene trees that may contain paralogs) for species tree inference. 
+
+Historically MRD was used in supertree
 estimation for orthologous sets, but recently many patristic distance-based [methods](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4391732/), also called
 [summary statistics methods](https://onlinelibrary.wiley.com/doi/full/10.1111/jse.12160) 
 ([NJst](https://doi.org/10.1093/sysbio/syr027),
 [STEM](https://doi.org/10.1093/bioinformatics/btp079), 
 [ASTRID](https://doi.org/10.1186/1471-2164-16-S10-S3), 
-[STAR](https://arxiv.org/abs/1204.4413), etc etc), can be applied to paralogous sets. 
+[STAR](https://arxiv.org/abs/1204.4413), etc.), can be applied to paralogous sets. 
 
 The software is fast enough such that it can be added into workflows, and given a large set of input trees (that we call *gene
 trees* or *gene families*) it produces a small set of output trees (*species trees*) that tries to summarise the
 information in the input trees.  Currently it assumes newick files, and the two suggested ways of using it are:
 
-1. If you have a list of all species names (see below), where you can then have missing data.
-2. If all trees are on same leaf set, with very little missing data (the classic MRD setting).
+1. If you have a list of all species names;
+2. If all trees are on same leaf set, with very little missing data (the 'classic' MRD setting).
 
 ## Installation
 ### Conda
@@ -168,8 +170,8 @@ sliding window inference... in any case make sure the leaf names are the same be
 If the software estimates trees like the ones below, you may need to include more data in each tree.
 The ladderised pattern with long branches may indicate lack of pairwise comparisons (when a pair of species are never
 found together in the same gene tree). 
-<img src="tree201.png" width="500" align="middle">
 
+<img src="tree201.png" width="500" align="middle">
 
 ## Algorithms: distance-based, or MRD supertrees
 Several distance-based are implemented. Multifurcating trees are allowed, since the polytomies are transformed into dicotomies of length zero. 
