@@ -88,9 +88,9 @@ the options by running
 As seen above, all options have a short (one character) and a long version. Currently the available options are:
 - **--epsilon (-e)** This is the minimum branch length on internodal distances; values smaller than this are considered to
   be multifurcations
-- **--species (-s)** file name with the list of species names (optional, but stringly recommended)
+- **--species (-s)** file name with the list of species names (optional, but strongly recommended)
 - **--output (-o)** output filename with resulting supertrees (default is "-", which prints to screen)
-- **--fast (-F)** Just two species trees are estimated, instead of all of them.  
+- **--fast (-F)** Just two species trees are estimated, instead of all (36) of them.
 - **--version (-v)** prints compiled version and exits
 - all remaining arguments are assumed to be the names of gene files. 
 The list above may be incomplete as the software is under development. Please run `super_distance -h` for an up-to-date
@@ -98,7 +98,8 @@ description.
 
 It will output many trees using all possible combinations of branch rescaling, clustering algorithms, and matrix merging
 options. If option `--fast` was given, then only two trees are output, based on the UPGMA estimate of nodal distances
-and of normalised branch lengths (more on methods below). 
+and of normalised branch lengths (more on methods below). Use this option if handling many species (tips on the
+supertree). 
 
 The algorithms expect input trees with branch lengths (since it estimates distances between leaves using individual branch
 lengths), but the program works in their absence &mdash; although many output trees will be the same.
@@ -112,7 +113,7 @@ and/or several samples from same species as in population genomics data sets.
 These trees with the same label for several leaves are called "multi-labelled trees", or simply *mul-trees*.
 We use this term when we want to emphasise the distinction from classic supertrees approaches (where the objective was
 to create a tree on the full set of taxa, from trees on subsets of it).
-super\_distance works as expected on the classic setting, by the way. 
+Super\_distance works as expected on the classic setting, by the way. 
 
 Therefore, besides the input gene trees the program will request a file with a list of species names, which will provide
 a mapping between leaves from the gene trees and leaves from the species tree.
@@ -130,8 +131,9 @@ Pseudomonas_brassicacearum
 Pseudomonas_chlororaphis
 ```
 
-Then the gene leaves would be mapped as follow:
+Then the following gene leaves would be mapped as:
 ```[bash]
+__________________________________________________________________
 |      gene leaf names           | species it will be mapped to  |
 |--------------------------------|-------------------------------|
 | Neisseria_elongata_001         | Neisseria_elongata            |
@@ -141,10 +143,14 @@ Then the gene leaves would be mapped as follow:
 | Pseudomonas_chlororaphis       | Pseudomonas_chlororaphis      |   
 | Pseudomonas_brassicacearum     | Pseudomonas_brassicacearum    |   
 | Pseudomonas_brassica           | <<UNKNOWN>>                   | 
+__________________________________________________________________
 ```
+(at this point the program would complain that there is no species associated to gene leaf `Pseudomonas_brassica`. It is
+OK with the unused species `Neisseria_lactamica`, however).
+
 In the newick file it is valid to have several leaves with the same name, e.g. the species name, although most other software 
 won't allow it.
-`Super_distance` does not respect, however, spaces within a gene leaf or species names, despite these
+Super_distance does not respect, however, spaces within a gene leaf or species names, despite these
 agreeing with the [formal newick specification](http://evolution.genetics.washington.edu/phylip/newick_doc.html).
 Since the list of species names will define the leaves of the output trees, the program may work even
 in the presence of spaces, since it removes them from all input files.
@@ -163,7 +169,7 @@ Therefore if not providing the list of species, please check that:
 2. most gene trees have info on all species: although the program can handle trees with missing species, you have to make
    sure that at least one tree has no missing species. And MRD is not particularly good with a lot of missing data.
 
-In both cases the program will fail without a helpful message (it may say something like `Couldn't find species for genes`). 
+In both cases, failure to do so will lead the program to fail without a helpful message (it may say something like `Couldn't find species for genes`). 
 
 My suggestion is to use this option (without a list of species names) only if you are sure all trees are perfectly
 comparable, i.e. if they are different runs of same tree inference software on same data, or bootstrap replicates, or a
@@ -211,7 +217,8 @@ combinations, with a few caveats:
      approach](http://dx.doi.org/10.1093/bioinformatics/bth211). As mentioned above, weird things may happen then.
 
 As usual, some methods/combinations will make more sense than others. Currently the software reports a list of supertrees without any 
-explanation about the method, but this may change in future versions.
+explanation about the method, probably due to my bias towards consilience and away from defending one setting over
+another. This may change in future versions (the settings, not my view). 
 
 
 ## License 
