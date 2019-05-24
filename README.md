@@ -9,11 +9,12 @@ This software implements a class of methods called **Matrix Representation with 
 
 Historically MRD was used in supertree
 estimation for orthologous sets, but recently many patristic distance-based [methods](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4391732/), also called
-[summary statistics methods](https://onlinelibrary.wiley.com/doi/full/10.1111/jse.12160) 
+[summary statistics methods](https://onlinelibrary.wiley.com/doi/full/10.1111/jse.12160) have been developed 
 ([NJst](https://doi.org/10.1093/sysbio/syr027),
 [STEM](https://doi.org/10.1093/bioinformatics/btp079), 
 [ASTRID](https://doi.org/10.1186/1471-2164-16-S10-S3), 
-[STAR](https://arxiv.org/abs/1204.4413), etc.), can be applied to paralogous sets. 
+[STAR](https://arxiv.org/abs/1204.4413), etc.), and that can be applied to paralogous sets.
+**Super_distance** implements all (or most) of them with a single call. 
 
 The software is fast enough such that it can be added into workflows, and given a large set of input trees (that we call *gene
 trees* or *gene families*) it produces a small set of output trees (*species trees*) that tries to summarise the
@@ -73,6 +74,9 @@ there &mdash; remember that docker can only access files mounted with `-v`:
 ```[bash]
 docker run --rm -it -v /path/to/data:/data leomrtns/super_distance sh -c 'cd /data && super_distance -s species_names.txt gene*.tre'
 ```
+
+### Galaxy
+You can also install super_distance [from the Galaxy toolshed](https://testtoolshed.g2.bx.psu.edu/view/leomrtns/super_distance).
 
 ## Usage 
 The program works better with a file with species names (more info below) and a list of the gene trees, in newick format. You can see
