@@ -244,6 +244,7 @@ neighbour (NN)](https://en.wikipedia.org/wiki/Single-linkage_clustering), a.k.a.
 The combination of choices (A), (B), and (C) leads to 36 possible trees, which are, in order:
 
 |            | NJ+mean | NJ+min | UPGMA+mean | UPGMA+min | NN+mean | NN+min |
+-------------|---------|--------|------------|-----------|---------|--------|
 | nodal      | D00     | D01    | D02        | D03       |D04      | D05    |
 | averaged   | D06     | D07    | D08        | D09       |D10      | D11    |
 | unscaled   | D12     | D13    | D14        | D15       |D16      | D17    |
