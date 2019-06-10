@@ -220,6 +220,41 @@ As usual, some methods/combinations will make more sense than others. Currently 
 explanation about the method, probably due to my bias towards consilience and away from defending one setting over
 another. This may change in future versions (the settings, not my view). 
 
+## List of trees
+As mentioned above, super\_distance can calculate several trees or just two. Here is a brief description of the actual
+trees, focusing on the different choices of algorithms. For each gene tree, it rescales the branch lengths using 6 different approaches (A):
+
+1. **nodal:** all branch lengths are assumed to be zero if smaller than _epsilon_ or one otherwise
+2. **averaged:** branch lengths are divided by the average length, s.t. average length is one after rescaling
+3. **unscaled:** original values are used
+4. **resized:** each branch length is divided by the number of nodes, leading to new tree length (sum of all rescaled branches) being the
+   average (original) branch length
+5. **normalised:** branch lengths are divided the original tree length (sum of all branch lengths), s.t. new tree length
+   is one. 
+6. **bounded:** lengths are divided by smallest value higher than _epsilon_, s.t. new minimum is one. Branches shorter 
+   than _epsilon_ are unchanged (and will look really small!)
+
+The names above are just for discriminating the rescalings, and don't have a deep statistical interpretation. If
+paralogs are found, then we can take the **mean** or the **minimum** over distances between same species pairs (B).
+The resulting (rescaled) distance matrices are then averaged and the mean scaling factor is used to create a pairwise
+distance matrix, which will be used by a clustering algorithm. This clustering algorithm can be
+[bioNJ](https://www.ncbi.nlm.nih.gov/pubmed/9254330), [UPGMA](https://en.wikipedia.org/wiki/UPGMA), or [nearest
+neighbour (NN)](https://en.wikipedia.org/wiki/Single-linkage_clustering), a.k.a. single-linkage clusteing (C). 
+
+The combination of choices (A), (B), and (C) leads to 36 possible trees, which are, in order:
+
+|            | NJ+mean | NJ+min | UPGMA+mean | UPGMA+min | NN+mean | NN+min |
+| nodal      | D00     | D01    | D02        | D03       |D04      | D05    |
+| averaged   | D06     | D07    | D08        | D09       |D10      | D11    |
+| unscaled   | D12     | D13    | D14        | D15       |D16      | D17    |
+| resized    | D18     | D19    | D20        | D21       |D22      | D23    |
+| normalised | D24     | D25    | D26        | D27       |D28      | D29    |
+| bounded    | D30     | D31    | D32        | D33       |D34      | D35    |
+
+When "nodal" distances are used to estimate the tree (i.e. trees D00-D05) then the branch lengths will be estimated from
+the final "averaged" matrix. 
+If no paralogs are present, then all trees will be identical to one of their neighbours (e.g. D00 and D01). If the
+_fast_ option is set (`-F`), then only tree D02 and D08 are output. 
 
 ## License 
 Copyright (C) 2019-today  [Leonardo de Oliveira Martins](https://github.com/leomrtns)
