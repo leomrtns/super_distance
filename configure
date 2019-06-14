@@ -637,6 +637,7 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIBOBJS
+BIOMCMCLIB
 subdirs
 MPI_CXXFLAGS
 MPI_CXXLIBS
@@ -13332,11 +13333,58 @@ $as_echo "                ===    end of specific configuration options" >&6; }
 
 ac_config_files="$ac_config_files Makefile lib/Makefile src/Makefile tests/Makefile"
 
+as_ac_File=`$as_echo "ac_cv_file_${srcdir}/biomcmc-lib" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ${srcdir}/biomcmc-lib" >&5
+$as_echo_n "checking for ${srcdir}/biomcmc-lib... " >&6; }
+if eval \${$as_ac_File+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  test "$cross_compiling" = yes &&
+  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
+if test -r "${srcdir}/biomcmc-lib"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+eval ac_res=\$$as_ac_File
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_File"\" = x"yes"; then :
+
+else
+  ln -s submodules/biomcmc-lib ${srcdir}/biomcmc-lib
+fi
+
+as_ac_File=`$as_echo "ac_cv_file_${srcdir}/biomcmc-lib/configure.ac" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ${srcdir}/biomcmc-lib/configure.ac" >&5
+$as_echo_n "checking for ${srcdir}/biomcmc-lib/configure.ac... " >&6; }
+if eval \${$as_ac_File+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  test "$cross_compiling" = yes &&
+  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
+if test -r "${srcdir}/biomcmc-lib/configure.ac"; then
+  eval "$as_ac_File=yes"
+else
+  eval "$as_ac_File=no"
+fi
+fi
+eval ac_res=\$$as_ac_File
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_File"\" = x"yes"; then :
+
+else
+  as_fn_error $? "\"biomcmc-lib submodule missing, please git clone --recursive or link by hand to location of source code\"" "$LINENO" 5
+fi
 
 # Call biomcmc-lib ./configure script recursively.
 
 
 subdirs="$subdirs biomcmc-lib"
+
+BIOMCMCLIB=biomcmc-lib
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -15786,5 +15834,4 @@ Configuration parameters for super_distance:
  Compiler flags: ${AM_CFLAGS}
  Linker  flags:  ${AM_LDFLAGS}
  Install path:   ${prefix}
-
 ----"

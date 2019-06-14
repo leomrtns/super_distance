@@ -2944,19 +2944,24 @@ m4trace:configure.ac:38: -1- PKG_CHECK_EXISTS([check >= 0.9.10], [pkg_cv_[]CHECK
 m4trace:configure.ac:38: -1- PKG_CHECK_EXISTS([check >= 0.9.10], [pkg_cv_[]CHECK_LIBS=`$PKG_CONFIG --[]libs "check >= 0.9.10" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
 m4trace:configure.ac:38: -1- _PKG_SHORT_ERRORS_SUPPORTED
-m4trace:configure.ac:50: -1- m4_pattern_allow([^BIOMCMC_DEBUG$])
-m4trace:configure.ac:82: -1- m4_pattern_allow([^AM_CFLAGS$])
-m4trace:configure.ac:83: -1- m4_pattern_allow([^AM_LDFLAGS$])
-m4trace:configure.ac:84: -1- m4_pattern_allow([^MPI_CXXLIBS$])
-m4trace:configure.ac:85: -1- m4_pattern_allow([^MPI_CXXFLAGS$])
+m4trace:configure.ac:48: -1- m4_pattern_allow([^BIOMCMC_DEBUG$])
+m4trace:configure.ac:80: -1- m4_pattern_allow([^AM_CFLAGS$])
+m4trace:configure.ac:81: -1- m4_pattern_allow([^AM_LDFLAGS$])
+m4trace:configure.ac:82: -1- m4_pattern_allow([^MPI_CXXLIBS$])
+m4trace:configure.ac:83: -1- m4_pattern_allow([^MPI_CXXFLAGS$])
+m4trace:configure.ac:88: -1- _m4_warn([cross], [cannot check for file existence when cross compiling], [../../lib/autoconf/general.m4:2788: AC_CHECK_FILE is expanded from...
+configure.ac:88: the top level])
+m4trace:configure.ac:89: -1- _m4_warn([cross], [cannot check for file existence when cross compiling], [../../lib/autoconf/general.m4:2788: AC_CHECK_FILE is expanded from...
+configure.ac:89: the top level])
 m4trace:configure.ac:91: -1- m4_pattern_allow([^subdirs$])
-m4trace:configure.ac:92: -1- m4_pattern_allow([^LIB@&t@OBJS$])
-m4trace:configure.ac:92: -1- m4_pattern_allow([^LTLIBOBJS$])
-m4trace:configure.ac:92: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
-m4trace:configure.ac:92: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
-m4trace:configure.ac:92: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
-m4trace:configure.ac:92: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
-m4trace:configure.ac:92: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
-m4trace:configure.ac:92: -1- _AC_AM_CONFIG_HEADER_HOOK(["$ac_file"])
-m4trace:configure.ac:92: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
-m4trace:configure.ac:92: -1- _LT_PROG_LTMAIN
+m4trace:configure.ac:92: -1- m4_pattern_allow([^BIOMCMCLIB$])
+m4trace:configure.ac:93: -1- m4_pattern_allow([^LIB@&t@OBJS$])
+m4trace:configure.ac:93: -1- m4_pattern_allow([^LTLIBOBJS$])
+m4trace:configure.ac:93: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
+m4trace:configure.ac:93: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
+m4trace:configure.ac:93: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
+m4trace:configure.ac:93: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
+m4trace:configure.ac:93: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
+m4trace:configure.ac:93: -1- _AC_AM_CONFIG_HEADER_HOOK(["$ac_file"])
+m4trace:configure.ac:93: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
+m4trace:configure.ac:93: -1- _LT_PROG_LTMAIN

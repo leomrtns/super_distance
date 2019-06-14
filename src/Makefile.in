@@ -186,6 +186,7 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BIOMCMCLIB = @BIOMCMCLIB@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
@@ -305,7 +306,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-AM_CPPFLAGS = $(GTKDEPS_CFLAGS) -I$(srcdir)/../lib -I$(srcdir)/../biomcmc-lib/lib  @OPENMP_CPPFLAGS@
+AM_CPPFLAGS = $(GTKDEPS_CFLAGS) -I$(srcdir)/../lib -I$(srcdir)/../@BIOMCMCLIB@/lib  @OPENMP_CPPFLAGS@
 LDADD = $(GTKDEPS_LIBS) ../lib/libsuper_distance.la ../biomcmc-lib/lib/libbiomcmc.la  $(AM_LDFLAGS)
 super_distance_SOURCES = src_super_distance.c src_super_distance.h
 all: all-am

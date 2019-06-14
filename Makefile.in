@@ -214,6 +214,7 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+BIOMCMCLIB = @BIOMCMCLIB@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
@@ -335,7 +336,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 EXTRA_DIST = recipe 
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = biomcmc-lib lib src tests
+SUBDIRS = @BIOMCMCLIB@ lib src tests
 all: all-recursive
 
 .SUFFIXES:
