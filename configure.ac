@@ -42,9 +42,7 @@ dnl library checks (math etc.) are done by biomcmc-lib
 AC_MSG_RESULT([                ===    configuration options specific to super_distance])
 
 AC_MSG_CHECKING([whether to build (slower) debug code])
-AC_ARG_ENABLE([debug],
-    [AS_HELP_STRING([--enable-debug], [enable debugging with gdb and friends (default=no)])],
-    [debugit="$enableval"], [debugit=no])
+AC_ARG_ENABLE([debug], [AS_HELP_STRING([--enable-debug], [enable debugging with gdb and friends (default=no)])],[debugit="$enableval"], [debugit=no])
 AC_MSG_RESULT([$debugit])
 if test x"$debugit" = x"yes"; then
     AC_DEFINE([BIOMCMC_DEBUG],[],[Debug Mode, with assert()-like error checking])
@@ -86,9 +84,12 @@ AC_SUBST([MPI_CXXFLAGS])
 
 dnl generate makefiles (last recipes, after defining CFLAGS etc.)
 AC_CONFIG_FILES([ Makefile lib/Makefile src/Makefile tests/Makefile])
-
+dnl better solution is to allow arbitrary location for biomcmc-lib (it relies on ln)
+AC_CHECK_FILE([${srcdir}/biomcmc-lib],[],[ln -s submodules/biomcmc-lib ${srcdir}/biomcmc-lib])
+AC_CHECK_FILE([${srcdir}/biomcmc-lib/configure.ac],[], [AC_MSG_ERROR(["biomcmc-lib submodule missing, please git clone --recursive or link by hand to location of source code"])])
 # Call biomcmc-lib ./configure script recursively.
 AC_CONFIG_SUBDIRS([biomcmc-lib])
+AC_SUBST([BIOMCMCLIB], [biomcmc-lib])
 AC_OUTPUT
 
 echo \
@@ -100,5 +101,4 @@ Configuration parameters for super_distance:
  Compiler flags: ${AM_CFLAGS} 
  Linker  flags:  ${AM_LDFLAGS}
  Install path:   ${prefix}
-
 ----"
