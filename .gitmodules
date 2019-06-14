@@ -1,4 +1,4 @@
 [submodule "biomcmc-lib"]
-	path = biomcmc-lib
+	path = .submods/biomcmc-lib
 	url = https://github.com/leomrtns/biomcmc-lib.git
 #	url = git@github.com:leomrtns/biomcmc-lib.git
