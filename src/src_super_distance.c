@@ -23,7 +23,7 @@ get_parameters_from_argv (int argc, char **argv)
   params.tol->dval[0] = 1e-7;
   /* actual parsing: */
   if (arg_nullcheck(params.argtable)) biomcmc_error ("Problem allocating memory for the argtable (command line arguments) structure");
-  if (arg_parse (argc, argv, params.argtable)) print_usage (params, argv[0]);
+  if (arg_parse (argc, argv, params.argtable)) print_usage (params, argv[0]); // only works since we have obligatory arguments (o.w. would never print help)
   //if (params.help->count) print_usage (params, argv[0]);
   return params;
 }
