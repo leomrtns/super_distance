@@ -11,4 +11,4 @@ install-sh        linguist-vendored=true
 ltmain.sh         linguist-vendored=true
 missing           linguist-vendored=true
 test-driver       linguist-vendored=true
-*/Makefile*       linguist-vendored=true
+Makefile*         linguist-vendored=true
