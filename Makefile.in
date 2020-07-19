@@ -802,6 +802,8 @@ uninstall-am:
 
 .PRECIOUS: Makefile
 
+# https://stackoverflow.com/questions/25065337/building-nested-autotools-package-without-installing
+install installdirs: SUBDIRS = lib src tests # do not install biomcmc-lib (only works with --disable-shared atm) 
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

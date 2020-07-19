@@ -109,7 +109,7 @@ super_distance_OBJECTS = $(am_super_distance_OBJECTS)
 super_distance_LDADD = $(LDADD)
 am__DEPENDENCIES_1 =
 super_distance_DEPENDENCIES = ../lib/libsuper_distance.la \
-	../biomcmc-lib/lib/libbiomcmc.la $(am__DEPENDENCIES_1)
+	../biomcmc-lib/lib/libbiomcmc_static.la $(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -307,7 +307,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = $(GTKDEPS_CFLAGS) -I$(srcdir)/../lib -I$(srcdir)/../@BIOMCMCLIB@/lib  @OPENMP_CPPFLAGS@
-LDADD = $(GTKDEPS_LIBS) ../lib/libsuper_distance.la ../biomcmc-lib/lib/libbiomcmc.la  $(AM_LDFLAGS)
+LDADD = $(GTKDEPS_LIBS) ../lib/libsuper_distance.la ../biomcmc-lib/lib/libbiomcmc_static.la  $(AM_LDFLAGS)
 super_distance_SOURCES = src_super_distance.c src_super_distance.h
 all: all-am
 
