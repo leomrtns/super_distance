@@ -38,7 +38,7 @@ The instalation uses the autotools build system for compilation, and relies on t
 recursivelly:
 ```[bash]
 /home/simpson/$ git clone --recursive git@github.com:quadram-institute-bioscience/super_distance.git
-/home/simpson/$ (cd super_distance && autoreconf)  ## notice the parentheses to avoid entering the directory
+/home/simpson/$ (cd super_distance && ./autogen.sh)  ## notice the parentheses to avoid entering the directory
 /home/simpson/$ mkdir build && cd build
 /home/simpson/$ ../super_distance/configure --prefix=/usr/local
 /home/simpson/$ make; sudo make install
