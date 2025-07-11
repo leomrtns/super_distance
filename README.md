@@ -206,7 +206,7 @@ combinations, with a few caveats:
   
   1. We only use the average, and not the minimum, between loci. Within a locus (gene) we use both the average and the
      minimum.
-  2. We implemented both UPGMA and single-linkage clustering, besides the bioNJ implemenentation of the
+  2. We implemented both UPGMA and single-linkage clustering, besides the bioNJ implementation of the
      Neighbour-Joining algorithm. 
   3. When we rescale the gene trees, we scale back the final pairwise distance matrix, before the clustering step. This
      final scaling is based on the average over all genes, such that all supertrees should have easily interpretable lengths.
