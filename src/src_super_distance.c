@@ -67,13 +67,13 @@ print_usage (arg_parameters params, char *progname)
     printf (" it uses fewer scalings/options, providing a fast estimation. We avoid using individual gene trees since they may have \n");
     printf (" missing information (missing species or species pairs). For missing comparisons (when two species are never seen in the same gene tree)\n");
     printf (" we use the ultrametric condition (comparison to a common species) to estimate its value.\n\n");
-    printf ("If a file with species names is given, the program allows for paralogs; otherwise it assumes orthology and that _at_least_ one tree has no missing data:\n");
+    printf ("If a file with species names is given, the program allows for paralogs; otherwise it assumes orthology:\n");
     printf (" * Paralogy: the species names will be mapped to individual gene tree leaves (e.g. `ECOLI_a` and `ECOLI_b` will both map to species `ECOLI`).\n ");
     printf ("   Each gene tree can therefore have several copies of each species, and can also have missing species.\n");
     printf (" * Orthology: if a file with species names is not given, however, it is assumed that each species is represented at most once per gene, and\n");
     printf ("   furthermore that the leaf names represent the species, and are thus identical across trees. This mode is the underlying assumption behind\n");
-    printf ("   most tree comparison software, although here missing data for some trees (not all) is allowed. I.e. as long as one tree has full information\n");
-    printf ("   (for all species), then others can have some absent species.\n");
+    printf ("   most tree comparison software. Species names are collected from all gene trees, so every tree may have missing species.\n");
+    printf ("The program detects whether any gene maps more than once to a species. Orthologous data produce 18 non-redundant trees; paralogous data produce 36.\n");
     printf ("With paralogs or not, it is not recommended to have missing entries in the distance matrix (e.g. when a species pair does not appear in any tree),\n");
     printf (" and matrix representation with distances methods work better with more 'complete' gene trees.\n\n");
   }
@@ -98,6 +98,7 @@ main (int argc, char **argv)
   /* read species names and reduce to valid ones: */ 
   if (params.spname->count) {
     original_spnames = new_char_vector_from_file ((char*) params.spname->filename[0]);
+    if (!original_spnames->next_avail) biomcmc_error ("species file does not contain any valid names");
     species_names = get_species_names_from_newick_space (gene_nwk, original_spnames, true); // true= reorder species names
     del_char_vector (original_spnames); // free() or decrease ref_counter is same as species_names
   }
@@ -110,21 +111,19 @@ main (int argc, char **argv)
 
   /* mode: fast version of patristic-based upgma tree: */
   if (params.fast->count) { 
-    sptrees = find_matrix_distance_species_tree (gene_nwk, species_names, params.tol->dval[0], false, false, true);
+    sptrees = find_matrix_distance_species_tree (gene_nwk, species_names, params.tol->dval[0], false, false, true, !params.spname->count);
     for (i=0; i < sptrees->ntrees; i++) { 
       s = topology_to_string_by_name (sptrees->t[i], sptrees->t[i]->blength);
       fprintf (stream, "[F%02d] %s\n", i, s); fflush(stream); free (s);
     }
-    del_newick_space (sptrees);
   }
   /* mode: patristic-based nj/upgma tree: */
   else { 
-    sptrees = find_matrix_distance_species_tree (gene_nwk, species_names, params.tol->dval[0], false, false, false);
+    sptrees = find_matrix_distance_species_tree (gene_nwk, species_names, params.tol->dval[0], false, false, false, !params.spname->count);
     for (i=0; i < sptrees->ntrees; i++) { 
       s = topology_to_string_by_name (sptrees->t[i], sptrees->t[i]->blength);
       fprintf (stream, "[D%02d] %s\n", i, s); fflush(stream); free (s);
     }
-    del_newick_space (sptrees);
   }
 
   if (stream != stdout) fclose (stream);

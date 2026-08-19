@@ -102,9 +102,10 @@ and of normalised branch lengths (more on methods below). Use this option if han
 supertree). 
 
 The algorithms expect input trees with branch lengths (since it estimates distances between leaves using individual branch
-lengths), but the program works in their absence &mdash; although many output trees will be the same.
-Some output trees will also be the same if there are no paralogs (since they use different strategies for paralog
-distances resolution). 
+lengths), but the program works in their absence &mdash; although many output trees will be the same. The program detects
+whether any gene tree maps more than one tip to the same species. It outputs 18 trees for orthologous data and retains
+the mean/min alternatives, producing 36 trees, when paralogs are detected. This detection also applies when a species
+file is supplied.
 
 ### Mapping from genes to species
 The input trees don't need to have information on all species, which is the classic supertree setting. 
@@ -159,21 +160,20 @@ In the future, and if it bothers enough people, we may implement automatic infer
 ### Missing file with species names
 The software works equally well in the absence of mul-trees, in which case the file with species names may not be
 needed. 
-In this situation, however, the software will not do extensive checks of name compliance &mdash; it will simply assume 
-that the largest gene tree has _all_ species represented.
+In this situation, however, the software will not do extensive checks of name compliance. It assumes that every unique
+gene-tree leaf name is a species name and collects the full species set across all input trees.
 
 Therefore if not providing the list of species, please check that:
 
 1. gene leaf names are comparable across genes: e.g. "ECOLI-a" and "ECOLI-b" are two different 'species' in the absence
    of a species name list; only the list could say that "ECOLI" is the species name.
-2. most gene trees have info on all species: although the program can handle trees with missing species, you have to make
-   sure that at least one tree has no missing species. And MRD is not particularly good with a lot of missing data.
+2. there is enough overlap between gene trees to estimate the required species-pair distances. No single tree needs to
+   contain all species, but MRD is not particularly good with a lot of missing data.
 
-In both cases, failure to do so will lead the program to fail without a helpful message (it may say something like `Couldn't find species for genes`). 
+Inconsistent names will be treated as different species, while insufficient overlap creates missing species-pair comparisons.
 
-My suggestion is to use this option (without a list of species names) only if you are sure all trees are perfectly
-comparable, i.e. if they are different runs of same tree inference software on same data, or bootstrap replicates, or a
-sliding window inference... in any case make sure the leaf names are the same between trees.
+Use this option (without a list of species names) only when each species is represented at most once per gene tree and
+the same species always has the same leaf name. Individual gene trees may contain different subsets of species.
 
 ### Moar data!
 
@@ -241,7 +241,7 @@ distance matrix, which will be used by a clustering algorithm. This clustering a
 [bioNJ](https://www.ncbi.nlm.nih.gov/pubmed/9254330), [UPGMA](https://en.wikipedia.org/wiki/UPGMA), or [nearest
 neighbour (NN)](https://en.wikipedia.org/wiki/Single-linkage_clustering), a.k.a. single-linkage clusteing (C). 
 
-The combination of choices (A), (B), and (C) leads to 36 possible trees, which are, in order:
+When paralogs are present, the combination of choices (A), (B), and (C) leads to 36 possible trees, which are, in order:
 
 |            | NJ+mean | NJ+min | UPGMA+mean | UPGMA+min | NN+mean | NN+min |
 -------------|---------|--------|------------|-----------|---------|--------|
@@ -252,10 +252,20 @@ The combination of choices (A), (B), and (C) leads to 36 possible trees, which a
 | normalised | D24     | D25    | D26        | D27       |D28      | D29    |
 | bounded    | D30     | D31    | D32        | D33       |D34      | D35    |
 
-When "nodal" distances are used to estimate the tree (i.e. trees D00-D05) then the branch lengths will be estimated from
-the final "averaged" matrix. 
-If no paralogs are present, then all trees will be identical to one of their neighbours (e.g. D00 and D01). If the
-_fast_ option is set (`-F`), then only tree D02 and D08 are output. 
+For orthologous data, mean and minimum distances are identical, so the redundant alternative is omitted:
+
+|            | NJ  | UPGMA | NN  |
+|------------|-----|-------|-----|
+| nodal      | D00 | D01   | D02 |
+| averaged   | D03 | D04   | D05 |
+| unscaled   | D06 | D07   | D08 |
+| resized    | D09 | D10   | D11 |
+| normalised | D12 | D13   | D14 |
+| bounded    | D15 | D16   | D17 |
+
+When "nodal" distances are used to estimate the tree, their branch lengths are estimated from the final "averaged"
+matrix. If the _fast_ option is set (`-F`), only mean-distance UPGMA trees for the nodal and averaged rescalings are
+output as F00 and F01.
 
 ## License 
 Copyright (C) 2019-today  [Leonardo de Oliveira Martins](https://github.com/leomrtns)
