@@ -40,8 +40,8 @@ PKG_CHECK_MODULES([ZLIB], [zlib],
                   AC_DEFINE([HAVE_ZLIB],[0],[set to one if gz compression library found])
                   )
 PKG_CHECK_MODULES([LZMA], [liblzma], 
-                  AC_DEFINE([HAVE_LZMA],[1],[]),  
-                  AC_MSG_NOTICE([liblzma NOT found, building without xz compression support])
+                  [AC_DEFINE([HAVE_LZMA],[1],[set to one if xz compression library found])],
+                  [AC_MSG_NOTICE([liblzma NOT found, building without xz compression support])]
                   )
 AC_CHECK_HEADER(bzlib.h, 
                   AC_DEFINE([HAVE_BZIP2],[1],[]),  
