@@ -216,9 +216,9 @@ combinations, with a few caveats:
      the same gene. In this case we estimate their pairwise distance from species in common using the [ultrametric
      approach](http://dx.doi.org/10.1093/bioinformatics/bth211). As mentioned above, weird things may happen then.
 
-As usual, some methods/combinations will make more sense than others. Currently the software reports a list of supertrees without any 
-explanation about the method, probably due to my bias towards consilience and away from defending one setting over
-another. This may change in future versions (the settings, not my view). 
+As usual, some methods/combinations will make more sense than others. Each output tree has a descriptive label combining
+the branch-length rescaling, clustering algorithm, and (when relevant) the method used to combine distances between
+paralogs.
 
 ## List of trees
 As mentioned above, super\_distance can calculate several trees or just two. Here is a brief description of the actual
@@ -243,29 +243,29 @@ neighbour (NN)](https://en.wikipedia.org/wiki/Single-linkage_clustering), a.k.a.
 
 When paralogs are present, the combination of choices (A), (B), and (C) leads to 36 possible trees, which are, in order:
 
-|            | NJ+mean | NJ+min | UPGMA+mean | UPGMA+min | NN+mean | NN+min |
--------------|---------|--------|------------|-----------|---------|--------|
-| nodal      | D00     | D01    | D02        | D03       |D04      | D05    |
-| averaged   | D06     | D07    | D08        | D09       |D10      | D11    |
-| unscaled   | D12     | D13    | D14        | D15       |D16      | D17    |
-| resized    | D18     | D19    | D20        | D21       |D22      | D23    |
-| normalised | D24     | D25    | D26        | D27       |D28      | D29    |
-| bounded    | D30     | D31    | D32        | D33       |D34      | D35    |
+|            | NJ+mean        | NJ+min        | UPGMA+mean        | UPGMA+min        | NN+mean        | NN+min        |
+|------------|----------------|---------------|-------------------|------------------|----------------|---------------|
+| nodal      | nodal-NJmean   | nodal-NJmin   | nodal-UPGMAmean   | nodal-UPGMAmin   | nodal-NNmean   | nodal-NNmin   |
+| averaged   | averaged-NJmean | averaged-NJmin | averaged-UPGMAmean | averaged-UPGMAmin | averaged-NNmean | averaged-NNmin |
+| unscaled   | unscaled-NJmean | unscaled-NJmin | unscaled-UPGMAmean | unscaled-UPGMAmin | unscaled-NNmean | unscaled-NNmin |
+| resized    | resized-NJmean | resized-NJmin | resized-UPGMAmean | resized-UPGMAmin | resized-NNmean | resized-NNmin |
+| normalised | normalised-NJmean | normalised-NJmin | normalised-UPGMAmean | normalised-UPGMAmin | normalised-NNmean | normalised-NNmin |
+| bounded    | bounded-NJmean | bounded-NJmin | bounded-UPGMAmean | bounded-UPGMAmin | bounded-NNmean | bounded-NNmin |
 
 For orthologous data, mean and minimum distances are identical, so the redundant alternative is omitted:
 
-|            | NJ  | UPGMA | NN  |
-|------------|-----|-------|-----|
-| nodal      | D00 | D01   | D02 |
-| averaged   | D03 | D04   | D05 |
-| unscaled   | D06 | D07   | D08 |
-| resized    | D09 | D10   | D11 |
-| normalised | D12 | D13   | D14 |
-| bounded    | D15 | D16   | D17 |
+|            | NJ            | UPGMA            | NN            |
+|------------|---------------|------------------|---------------|
+| nodal      | nodal-NJ      | nodal-UPGMA      | nodal-NN      |
+| averaged   | averaged-NJ   | averaged-UPGMA   | averaged-NN   |
+| unscaled   | unscaled-NJ   | unscaled-UPGMA   | unscaled-NN   |
+| resized    | resized-NJ    | resized-UPGMA    | resized-NN    |
+| normalised | normalised-NJ | normalised-UPGMA | normalised-NN |
+| bounded    | bounded-NJ    | bounded-UPGMA    | bounded-NN    |
 
 When "nodal" distances are used to estimate the tree, their branch lengths are estimated from the final "averaged"
 matrix. If the _fast_ option is set (`-F`), only mean-distance UPGMA trees for the nodal and averaged rescalings are
-output as F00 and F01.
+output as `nodal-UPGMA` and `averaged-UPGMA`.
 
 ## License 
 Copyright (C) 2019-today  [Leonardo de Oliveira Martins](https://github.com/leomrtns)

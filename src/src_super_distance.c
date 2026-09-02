@@ -2,6 +2,31 @@
 
 void del_arg_parameters (arg_parameters params);
 void print_usage (arg_parameters params, char *progname);
+void format_tree_label (char *label, size_t label_size, int tree_index, int tree_count, bool fast);
+
+void
+format_tree_label (char *label, size_t label_size, int tree_index, int tree_count, bool fast)
+{
+  const char *distance_names[] = {"nodal", "averaged", "unscaled", "resized", "normalised", "bounded"};
+  const char *tree_method_names[] = {"NJ", "UPGMA", "NN"};
+  int distance_index, tree_method_index;
+  bool has_paralogs;
+
+  if (fast) {
+    if ((tree_index < 0) || (tree_index > 1)) biomcmc_error ("invalid fast tree index %d", tree_index);
+    snprintf (label, label_size, "%s-UPGMA", distance_names[tree_index]);
+    return;
+  }
+
+  if ((tree_count != 18) && (tree_count != 36)) biomcmc_error ("unexpected number of species trees: %d", tree_count);
+  if ((tree_index < 0) || (tree_index >= tree_count)) biomcmc_error ("invalid species tree index %d", tree_index);
+
+  has_paralogs = (tree_count == 36);
+  distance_index = tree_index / (has_paralogs ? 6 : 3);
+  tree_method_index = has_paralogs ? (tree_index % 6) / 2 : tree_index % 3;
+  snprintf (label, label_size, "%s-%s%s", distance_names[distance_index], tree_method_names[tree_method_index],
+            has_paralogs ? ((tree_index % 2) ? "min" : "mean") : "");
+}
 
 arg_parameters
 get_parameters_from_argv (int argc, char **argv)
@@ -89,6 +114,7 @@ main (int argc, char **argv)
   newick_space sptrees = NULL;
   FILE *stream=NULL;
   char *s;
+  char tree_label[32];
 
   /* initialisation: */
   biomcmc_random_number_init (0);
@@ -114,7 +140,8 @@ main (int argc, char **argv)
     sptrees = find_matrix_distance_species_tree (gene_nwk, species_names, params.tol->dval[0], false, false, true, !params.spname->count);
     for (i=0; i < sptrees->ntrees; i++) { 
       s = topology_to_string_by_name (sptrees->t[i], sptrees->t[i]->blength);
-      fprintf (stream, "[F%02d] %s\n", i, s); fflush(stream); free (s);
+      format_tree_label (tree_label, sizeof (tree_label), i, sptrees->ntrees, true);
+      fprintf (stream, "[%s] %s\n", tree_label, s); fflush(stream); free (s);
     }
   }
   /* mode: patristic-based nj/upgma tree: */
@@ -122,7 +149,8 @@ main (int argc, char **argv)
     sptrees = find_matrix_distance_species_tree (gene_nwk, species_names, params.tol->dval[0], false, false, false, !params.spname->count);
     for (i=0; i < sptrees->ntrees; i++) { 
       s = topology_to_string_by_name (sptrees->t[i], sptrees->t[i]->blength);
-      fprintf (stream, "[D%02d] %s\n", i, s); fflush(stream); free (s);
+      format_tree_label (tree_label, sizeof (tree_label), i, sptrees->ntrees, false);
+      fprintf (stream, "[%s] %s\n", tree_label, s); fflush(stream); free (s);
     }
   }
 
